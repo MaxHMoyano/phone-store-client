@@ -1,0 +1,11 @@
+// Bootstrap utilities
+@import '~bootstrap/scss/bootstrap';
+
+// Override theme
+$dark: #3b3d38;
+$primary: #333;
+$secondary: #efe64a;
+$light: #f4f4f4;
+
+// Custom styles
+@import './layout';

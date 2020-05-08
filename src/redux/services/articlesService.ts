@@ -1,8 +1,4 @@
 import { handleResponse } from '../../util/serverResponse';
-import dotenv from 'dotenv';
-
-// load env vars
-dotenv.config({ path: '../../config/config.env' });
 
 export const articlesService = {
   fetchRates,
@@ -11,8 +7,7 @@ export const articlesService = {
 function fetchRates() {
   const requestOptions = {
     method: 'GET',
-    // headers: authHeader(),
   };
-  let url = `${process.env.API_URL}/${process.env.API_VERSION}/articles`;
+  let url = `${process.env.REACT_APP_API_URL}/articles/`;
   return fetch(url, requestOptions).then(handleResponse);
 }

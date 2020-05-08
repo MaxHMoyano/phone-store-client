@@ -1,0 +1,14 @@
+.main_container {
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  background-color: $light;
+}
+
+.main_content {
+  flex: 1 0;
+  color: $light;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem 1.1rem;
+}
