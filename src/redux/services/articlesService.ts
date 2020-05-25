@@ -7,7 +7,10 @@ export const articlesService = {
 function fetchRates() {
   const requestOptions = {
     method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache',
+    },
   };
-  let url = `${process.env.REACT_APP_API_URL}/articles/`;
+  let url = `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/`;
   return fetch(url, requestOptions).then(handleResponse);
 }

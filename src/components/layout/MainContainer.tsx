@@ -1,12 +1,17 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Header from './Navbar';
 import Footer from './Footer';
-import { Articles } from '../../pages/articles/Articles';
+import Home from '../../pages/home/Home';
+import ShoppingCart from '../shared/ShoppingCart';
 
 const MainContainer = () => {
   return (
     <div className='main_container'>
       <Header />
+      <div className='main_content'>
+        <Home></Home>
+      </div>
+      <ShoppingCart />
       <Footer />
     </div>
   );

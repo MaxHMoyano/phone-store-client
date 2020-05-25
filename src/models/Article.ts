@@ -1,6 +1,7 @@
 export default interface Article {
-  id?: Number;
+  id?: String;
   name: String;
   description: String;
-  photo: File | String;
+  image: string;
+  price: Number;
 }

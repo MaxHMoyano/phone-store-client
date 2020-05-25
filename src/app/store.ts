@@ -1,9 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import articlesReducer from '../redux/slices/articlesSlice';
+import articlesSlice from '../redux/slices/articlesSlice';
+import pendingTransactions from '../redux/slices/pendingTransactionsSlice';
+import shoppingCart from '../redux/slices/shoppingCartSlice';
 
 export const store = configureStore({
   reducer: {
-    articles: articlesReducer,
+    articles: articlesSlice,
+    pendingTransactions: pendingTransactions,
+    shoppinCart: shoppingCart,
   },
 });
 

@@ -1,12 +1,17 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, CSSProperties } from 'react';
 import { useDispatch } from 'react-redux';
+import { Articles } from '../articles/Articles';
 
 export default function Home() {
   const dispatch = useDispatch();
 
+  const homeStyles: CSSProperties = {
+    textAlign: 'center',
+  };
+
   return (
-    <Fragment>
-      <h1>Hello</h1>
-    </Fragment>
+    <div style={homeStyles}>
+      <Articles />
+    </div>
   );
 }

@@ -1,11 +1,29 @@
 // Bootstrap utilities
+
+$dark: #3b3d38;
+$primary: #efe64a;
+$secondary: #333;
+$light: #f0f2f5;
 @import '~bootstrap/scss/bootstrap';
+// @import '../../node_modules/react-multi-carousel/lib/styles.css';
 
 // Override theme
-$dark: #3b3d38;
-$primary: #333;
-$secondary: #efe64a;
-$light: #f4f4f4;
+$font-family-base: -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
+  helvetica neue, Arial, noto sans, sans-serif, apple color emoji,
+  segoe ui emoji, segoe ui symbol, noto color emoji;
 
 // Custom styles
 @import './layout';
+
+.shopping_cart_close {
+  color: $light;
+  transition: all 0.1s ease;
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 3rem;
+  &:hover {
+    color: $primary;
+    transform: translate3d(0, 2px, 0);
+  }
+}
