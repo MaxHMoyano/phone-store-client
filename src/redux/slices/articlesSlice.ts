@@ -1,4 +1,4 @@
-import Article from '../../models/Article';
+import { Article } from '../../models/Shared';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { articlesService } from '../services/articlesService';
@@ -12,7 +12,134 @@ interface ArticlesState {
 const initialState: ArticlesState = {
   pending: false,
   error: false,
-  data: [],
+  data: [
+    {
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+      name: 'Primer articulo',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      id: 'BFSN39N4BRsWV4vnyQJ2',
+    },
+    {
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1523206489230-c012c64b2b48?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+      name: 'TEST',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      id: 'HpjSdJtdHG5cla18MqN4',
+    },
+    {
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1517439270744-8d9287c2f8f8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1292&q=80',
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      id: 'MOYQoJeael8HG3U9g4wf',
+    },
+    {
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1545947597-7975c1d364eb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      id: 'VNFchIsYeVwkimOJ5eMT',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+    {
+      name: 'ITEM 1',
+      description:
+        'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsam facere itaque debitis quas esse? Molestias nostrum nam laborum maiores dolorem!',
+      price: 100,
+      image:
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+      id: 'nO5VWMlE2SfLL63uZlhb',
+    },
+  ],
 };
 
 export const articlesSlice = createSlice({
@@ -53,6 +180,6 @@ export const fetchArticles = (): AppThunk => (dispatch) => {
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectData = (state: RootState) => state.articles.data;
+export const selectArticles = (state: RootState) => state.articles.data;
 
 export default articlesSlice.reducer;

@@ -1,12 +1,12 @@
-import Article from '../../models/Article';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
+import { Article } from '../../models/Shared';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
 
-interface PendingTransaction {
+interface PendingTransactions {
   list: Article[];
 }
 
-const initialState: PendingTransaction = {
+const initialState: PendingTransactions = {
   list: [],
 };
 

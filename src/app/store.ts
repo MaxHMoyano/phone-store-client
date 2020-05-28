@@ -1,13 +1,15 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import articlesSlice from '../redux/slices/articlesSlice';
+import articles from '../redux/slices/articlesSlice';
 import pendingTransactions from '../redux/slices/pendingTransactionsSlice';
 import shoppingCart from '../redux/slices/shoppingCartSlice';
+import categories from '../redux/slices/categoriesSlice';
 
 export const store = configureStore({
   reducer: {
-    articles: articlesSlice,
-    pendingTransactions: pendingTransactions,
-    shoppinCart: shoppingCart,
+    articles,
+    pendingTransactions,
+    shoppingCart,
+    categories,
   },
 });
 

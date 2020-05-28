@@ -1,29 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans");
+
 // Bootstrap utilities
 
 $dark: #3b3d38;
 $primary: #efe64a;
 $secondary: #333;
 $light: #f0f2f5;
-@import '~bootstrap/scss/bootstrap';
+$font-family-base: "Roboto", sans-serif;
+@import "~bootstrap/scss/bootstrap";
 // @import '../../node_modules/react-multi-carousel/lib/styles.css';
 
 // Override theme
-$font-family-base: -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
-  helvetica neue, Arial, noto sans, sans-serif, apple color emoji,
-  segoe ui emoji, segoe ui symbol, noto color emoji;
 
 // Custom styles
-@import './layout';
-
-.shopping_cart_close {
-  color: $light;
-  transition: all 0.1s ease;
-  cursor: pointer;
-  position: absolute;
-  top: 1rem;
-  right: 3rem;
-  &:hover {
-    color: $primary;
-    transform: translate3d(0, 2px, 0);
-  }
-}
+@import "./layout";
+@import "./components";
+@import "./mobile";

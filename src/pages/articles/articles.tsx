@@ -1,53 +1,56 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectData, fetchArticles } from '../../redux/slices/articlesSlice';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Card, Button } from 'react-bootstrap';
+import {
+  addArticleToShoppingCart,
+  shoppingCartSlice,
+} from '../../redux/slices/shoppingCartSlice';
+import { selectArticles } from '../../redux/slices/articlesSlice';
 
-export function Articles() {
-  // const articles = useSelector(selectData);
+export default function Articles() {
   const dispatch = useDispatch();
 
-  const [articles, setArticles] = useState([
-    {
-      price: 100,
-      image: 'https://bit.ly/2yDLKbt',
-      name: 'ITEM 2',
-      description: 'KAREN',
-      id: 'BFSN39N4BRsWV4vnyQJ2',
-    },
-    {
-      price: 100,
-      image:
-        'https://s5.eestatic.com/2015/10/03/actualidad/Actualidad_68753203_129196255_1024x576.jpg',
-      name: 'TEST',
-      description: 'jojojo',
-      id: 'HpjSdJtdHG5cla18MqN4',
-    },
-    {
-      price: 100,
-      image: 'https://bit.ly/2yDLKbt',
-      name: 'ITEM 1',
-      description: 'KAREN',
-      id: 'MOYQoJeael8HG3U9g4wf',
-    },
-    {
-      price: 100,
-      image: 'https://bit.ly/2yDLKbt',
-      name: 'ITEM 1',
-      description: 'KAREN',
-      id: 'VNFchIsYeVwkimOJ5eMT',
-    },
-    {
-      name: 'ITEM 1',
-      description: 'KAREN',
-      price: 100,
-      image: 'https://bit.ly/2yDLKbt',
-      id: 'nO5VWMlE2SfLL63uZlhb',
-    },
-  ]);
+  const articles = useSelector(selectArticles);
+
+  const [showShoppingCart, setShowShoppingCart] = useState(false);
+
+  const addArticleToCart = (article) => {
+    dispatch(addArticleToShoppingCart(article));
+    if (!showShoppingCart) {
+      dispatch(shoppingCartSlice.actions.toggleShoppingCart(true));
+    }
+    setShowShoppingCart(true);
+  };
 
   useEffect(() => {
     // dispatch(fetchArticles());
   }, [dispatch]);
 
-  return <Fragment></Fragment>;
+  return (
+    <div className='articles_container'>
+      {articles.map((article, idx) => (
+        <Card
+          key={idx}
+          style={{ boxShadow: '5px 10px 16px #acacac' }}
+          className='article'
+        >
+          <Card.Img variant='top' src={article.image} height='200' />
+          <Card.Body className='d-flex justify-content-between align-items-center'>
+            <div className='d-flex flex-column'>
+              <Card.Title className='mb-1'>{article.name}</Card.Title>
+              <Card.Title className='mb-1 text-left font-weight-bold'>
+                ${article.price}
+              </Card.Title>
+            </div>
+            <Button
+              variant='primary'
+              onClick={(e) => addArticleToCart(article)}
+            >
+              <i className='fas fa-shopping-cart'></i>
+            </Button>
+          </Card.Body>
+        </Card>
+      ))}
+    </div>
+  );
 }

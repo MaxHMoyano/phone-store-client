@@ -1,0 +1,36 @@
+@media only screen and (max-width: 768px) {
+  .main_container {
+    grid-template-areas: "header" "content ";
+    grid-template-rows: 10vh 90vh;
+
+    .main_header {
+      .navbar_button {
+        &.navbar_home,
+        &.navbar_map {
+          display: none;
+        }
+      }
+    }
+
+    .main_footer {
+      display: none;
+    }
+  }
+
+  .articles_container {
+    grid-template-columns: repeat(1, 1fr);
+    .article {
+      width: 90vw;
+      transition: all 0.3s ease;
+      // cursor: pointer;
+      &:hover {
+        transform: translate3d(0, 3px, 0);
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .profile {
+    display: none;
+  }
+}

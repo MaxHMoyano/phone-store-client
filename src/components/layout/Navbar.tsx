@@ -1,68 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import Logo from '../../assets/brand.jpg';
+import React, { useEffect, Fragment, useState } from 'react';
 import { Button, Badge, Dropdown } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   shoppingCartSlice,
   shoppingCartArticlesCountSelector,
 } from '../../redux/slices/shoppingCartSlice';
+import { selectCategories } from '../../redux/slices/categoriesSlice';
+import { isMobileOnly } from 'react-device-detect';
+import Login from '../../components/shared/Login';
+import { NavLink } from 'react-router-dom';
 
+// Component
 const Navbar = () => {
   const dispatch = useDispatch();
 
   const pendingCount = useSelector(shoppingCartArticlesCountSelector);
+  const categories = useSelector(selectCategories);
+
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     document
-      .getElementById('dropdown-basic')
+      .getElementById('categories-dropdown')
       .classList.remove('dropdown-toggle');
   }, []);
 
   return (
-    <header className='main_header'>
-      <div className='brand'>
-        <Dropdown>
-          <Dropdown.Toggle variant='primary' id='dropdown-basic'>
-            <i className='fas fa-bars'></i>
-          </Dropdown.Toggle>
+    <Fragment>
+      <Login show={showLoginModal} onHide={(e) => setShowLoginModal(false)} />
+      <header className='main_header'>
+        <div className='brand'>
+          <Dropdown>
+            <Dropdown.Toggle variant='primary' id='categories-dropdown'>
+              {!isMobileOnly ? (
+                <Fragment>
+                  <span>Categorias</span>
+                  <i className='fas fa-caret-down ml-2'></i>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <i className='fas fa-bars'></i>
+                </Fragment>
+              )}
+            </Dropdown.Toggle>
 
-          <Dropdown.Menu>
-            <Dropdown.Item href='#/action-1'>Categoria 1</Dropdown.Item>
-            <Dropdown.Item href='#/action-2'>Categoria 2</Dropdown.Item>
-            <Dropdown.Item href='#/action-3'>Categoria 3</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-      <div className='actions ml-5'>
-        <Button variant='light' className='mx-2'>
-          <i className='fas fa-home'></i>
-        </Button>
-        <Button variant='light' className='mx-2'>
-          <i className='fas fa-map-marked'></i>
-        </Button>
-        <Button variant='light' className='mx-2'>
-          <i className='fas fa-share-alt'></i>
-        </Button>
-        <Button
-          variant='light'
-          className='mx-2'
-          onClick={(e) =>
-            dispatch(shoppingCartSlice.actions.toggleShoppingCart())
-          }
-        >
-          <i className='fas fa-shopping-cart'></i>
-        </Button>
-        <Badge
-          variant='primary'
-          style={{ position: 'relative', right: '1.5rem', bottom: '.75rem' }}
-        >
-          {pendingCount}
-        </Badge>
-      </div>
-      <div className='profile'>
-        <Button variant='light'>Iniciar Sesión</Button>
-      </div>
-    </header>
+            <Dropdown.Menu>
+              {categories.map((category, idx) => (
+                <Dropdown.Item key={idx} href='#/action-1'>
+                  {category.name}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div className='actions ml-5'>
+          <Fragment>
+            <NavLink to='/home'>
+              <Button
+                variant='light'
+                className='mx-2 navbar_button navbar_home'
+              >
+                <i className='fas fa-home'></i>
+              </Button>
+            </NavLink>
+            <NavLink to='/map'>
+              <Button
+                variant='light'
+                className='mx-2 navbar_button navbar_home'
+              >
+                <i className='fas fa-map-marked'></i>
+              </Button>
+            </NavLink>
+            <Button variant='light' className='mx-2 navbar_button'>
+              <i className='fas fa-share-alt'></i>
+            </Button>
+            <Button
+              variant='light'
+              className='mx-2 navbar_button'
+              onClick={(e) =>
+                dispatch(shoppingCartSlice.actions.toggleShoppingCart())
+              }
+            >
+              <i className='fas fa-shopping-cart'></i>
+            </Button>
+            <Badge
+              variant='primary'
+              style={{
+                position: 'relative',
+                right: '1.5rem',
+                bottom: '.75rem',
+              }}
+            >
+              {pendingCount}
+            </Badge>
+          </Fragment>
+        </div>
+        <div className='profile'>
+          <Button variant='light' onClick={(e) => setShowLoginModal(true)}>
+            Iniciar Sesión
+          </Button>
+        </div>
+      </header>
+    </Fragment>
   );
 };
 

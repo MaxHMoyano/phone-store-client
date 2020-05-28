@@ -58,8 +58,11 @@
     "react-app-polyfill": "^1.0.6",
     "react-bootstrap": "^1.0.1",
     "react-dev-utils": "^10.2.1",
+    "react-device-detect": "^1.12.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
+    "react-responsive-carousel": "^3.2.7",
+    "react-router-dom": "^5.2.0",
     "resolve": "1.15.0",
     "resolve-url-loader": "3.1.1",
     "sass-loader": "8.0.2",
@@ -148,5 +151,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.5"
   }
 }

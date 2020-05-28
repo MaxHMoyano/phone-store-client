@@ -1,0 +1,27 @@
+.shopping_toasts {
+  position: fixed;
+  width: 100vw;
+  top: 5%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.navbar_button {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translate3d(0, 2px, 0);
+    opacity: 0.9;
+  }
+}
+
+.footer_button {
+  transition: all ease 0.3s;
+  cursor: pointer;
+  &:hover {
+    color: lighten($color: $dark, $amount: 10%);
+    transform: translate3d(0, 2px, 0);
+  }
+}
