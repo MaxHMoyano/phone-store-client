@@ -20,7 +20,7 @@ const ShoppingCart = () => {
       className='main_shopping_cart'
       style={{
         width: `${
-          isShoppingCartActive ? (isMobileOnly ? '100vw' : '30vw') : '0'
+          isShoppingCartActive ? (isMobileOnly ? '100vw' : '35vw') : '0'
         }`,
       }}
     >
@@ -38,6 +38,23 @@ const ShoppingCart = () => {
           {shoppingCardArticles.map((article: Article, idx) => (
             <Card key={idx} className='mb-2' bg='secondary'>
               <Card.Body>
+                <i
+                  onClick={(e) =>
+                    dispatch(
+                      shoppingCartSlice.actions.removeArticleFromShoppingCart(
+                        article
+                      )
+                    )
+                  }
+                  className='fas fa-trash delete_article'
+                  style={{
+                    position: 'absolute',
+                    right: '.5rem',
+                    top: '.5rem',
+                    fontSize: '.75rem',
+                  }}
+                ></i>
+
                 <Card.Title className='text-light mb-0 d-flex align-items-center justify-content-between'>
                   {article.name}
                   <Form.Group className='w-25'>

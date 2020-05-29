@@ -6,7 +6,17 @@
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 1;
+}
+
+.delete_article {
+  color: $light;
+  transition: all ease 0.3s;
+  cursor: pointer;
+  &:hover {
+    color: darken($color: $light, $amount: 5%);
+    transform: translate3d(0, 2px, 0);
+  }
 }
 
 .navbar_button {

@@ -9,6 +9,7 @@ import { selectCategories } from '../../redux/slices/categoriesSlice';
 import { isMobileOnly } from 'react-device-detect';
 import Login from '../../components/shared/Login';
 import { NavLink } from 'react-router-dom';
+import NewArticle from '../shared/NewArticle';
 
 // Component
 const Navbar = () => {
@@ -18,16 +19,23 @@ const Navbar = () => {
   const categories = useSelector(selectCategories);
 
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showNewArticle, setShowNewArticle] = useState(false);
 
   useEffect(() => {
     document
-      .getElementById('categories-dropdown')
-      .classList.remove('dropdown-toggle');
+      .querySelectorAll('#categories-dropdown, #profile-dropdown')
+      .forEach((e) => {
+        e.classList.remove('dropdown-toggle');
+      });
   }, []);
 
   return (
     <Fragment>
       <Login show={showLoginModal} onHide={(e) => setShowLoginModal(false)} />
+      <NewArticle
+        show={showNewArticle}
+        onHide={(e) => setShowNewArticle(false)}
+      />
       <header className='main_header'>
         <div className='brand'>
           <Dropdown>
@@ -96,9 +104,30 @@ const Navbar = () => {
           </Fragment>
         </div>
         <div className='profile'>
-          <Button variant='light' onClick={(e) => setShowLoginModal(true)}>
+          {/* <Button variant='light' onClick={(e) => setShowLoginModal(true)}>
             Iniciar Sesión
-          </Button>
+          </Button> */}
+          <Dropdown>
+            <Dropdown.Toggle variant='primary' id='profile-dropdown'>
+              <i className='fas fa-user'></i>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={(e) => setShowNewArticle(true)}
+                className='p-3 d-flex align-items-center justify-content-between'
+              >
+                Agregar articulo
+                <i className='fas fa-plus ml-3'></i>
+              </Dropdown.Item>
+              <Dropdown.Item className='p-3 d-flex align-items-center justify-content-between'>
+                Compras pendientes
+                <Badge variant='info' className='ml-3'>
+                  3
+                </Badge>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </header>
     </Fragment>
