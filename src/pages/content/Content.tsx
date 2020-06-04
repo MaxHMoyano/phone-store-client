@@ -1,22 +1,14 @@
 import React, { Fragment } from 'react';
 import Articles from '../articles/Articles';
-import { Badge } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { selectSelectedCategory } from '../../redux/slices/categoriesSlice';
+import Home from './Home';
+import Contact from './Contact';
 
-export default function Home() {
-  const selectedCategory = useSelector(selectSelectedCategory);
-
+export default function Content() {
   return (
     <Fragment>
-      <div>
-        <h2>Tienda CoolCovers</h2>
-        <h3>
-          <Badge variant='info'>{selectedCategory.name}</Badge>
-        </h3>
-        <hr />
-        <Articles />
-      </div>
+      <Home />
+      <Articles />
+      {/* <Contact /> */}
     </Fragment>
   );
 }

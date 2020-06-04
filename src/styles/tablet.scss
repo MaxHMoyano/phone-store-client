@@ -1,0 +1,21 @@
+@media only screen and (min-width: 768px) {
+  .articles_container {
+    grid-template-columns: repeat(2, 1fr);
+    .article {
+      width: auto;
+    }
+  }
+
+  .main_container {
+    .main_header {
+      .navbar_button {
+        &.navbar_home,
+        &.navbar_map {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  // End of break point
+}

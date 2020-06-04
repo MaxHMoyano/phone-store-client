@@ -1,16 +1,86 @@
 import { handleResponse } from '../../util/serverResponse';
+import axios from 'axios';
+import { Article, Subarticle } from '../../models/Shared';
 
 export const articlesService = {
-  fetchRates,
+  fetchArticles,
+  getArticle,
+  createArticle,
+  updateArticle,
+  deleteArticle,
+  uploadArticlePhoto,
+  createSubarticles,
+  getSubarticle,
 };
 
-function fetchRates() {
-  const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Cache-Control': 'no-cache',
-    },
-  };
-  let url = `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/`;
-  return fetch(url, requestOptions).then(handleResponse);
+function fetchArticles(): Promise<Article[]> {
+  return axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/`
+    )
+    .then(handleResponse);
+}
+function getArticle(articleId: number): Promise<Article> {
+  return axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/${articleId}`
+    )
+    .then(handleResponse);
+}
+function createArticle(article: Article): Promise<Article> {
+  return axios
+    .post(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/`,
+      article
+    )
+    .then(handleResponse);
+}
+function updateArticle(article: Article): Promise<Article> {
+  return axios
+    .patch(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/${article.id}`,
+      article
+    )
+    .then(handleResponse);
+}
+function deleteArticle(articleId): Promise<Article> {
+  return axios
+    .delete(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/${articleId}`
+    )
+    .then(handleResponse);
+}
+
+function uploadArticlePhoto(articleId: String, photo: File) {
+  let form = new FormData();
+  form.append('photo', photo);
+  axios.post(
+    `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/${articleId}/photo`,
+    form,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+}
+
+function createSubarticles(
+  articleId: String,
+  articleItems: Subarticle[]
+): Promise<Subarticle[]> {
+  return axios
+    .post(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/${articleId}/subarticles`,
+      articleItems
+    )
+    .then(handleResponse);
+}
+
+function getSubarticle(subarticleId: String): Promise<Subarticle> {
+  return axios
+    .get(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/subarticles/${subarticleId}`
+    )
+    .then(handleResponse);
 }

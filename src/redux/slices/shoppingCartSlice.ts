@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
-import { Article } from '../../models/Shared';
+import { Subarticle, Item } from '../../models/Shared';
 
 interface ShoppingCart {
   active: Boolean;
-  articles: Article[];
-  recentlyAdded: Article[];
+  articles: Item[];
+  recentlyAdded: Subarticle[];
 }
 
 const initialState: ShoppingCart = {
@@ -25,18 +25,35 @@ export const shoppingCartSlice = createSlice({
         state.active = !state.active;
       }
     },
-    addArticleToShoppingCart: (state, action: PayloadAction<Article>) => {
-      state.articles.push(action.payload);
+    addArticleToShoppingCart: (state, action: PayloadAction<Subarticle>) => {
+      state.articles.push({
+        subarticle: action.payload.id,
+        quantity: 1,
+        name: action.payload.name,
+      });
       state.recentlyAdded.push(action.payload);
     },
-    removeArticleFromShoppingCart: (state, action: PayloadAction<Article>) => {
-      state.articles = state.articles.filter((e) => e.id !== action.payload.id);
+    removeArticleFromShoppingCart: (state, action: PayloadAction<Item>) => {
+      state.articles = state.articles.filter(
+        (e) => e.subarticle !== action.payload.subarticle
+      );
     },
-    removeArticleFromRecentlyAdded: (state, action: PayloadAction<Article>) => {
+    removeArticleFromRecentlyAdded: (
+      state,
+      action: PayloadAction<Subarticle>
+    ) => {
       let idx = state.recentlyAdded.findIndex(
         (e) => e.id === action.payload.id
       );
       state.recentlyAdded.splice(idx, 1);
+    },
+    changeItemQuantity: (state, action: PayloadAction<Item>) => {
+      let idx = state.articles.findIndex(
+        (e) => e.subarticle === action.payload.subarticle
+      );
+      state.articles[idx] = {
+        ...action.payload,
+      };
     },
   },
 });
@@ -45,12 +62,14 @@ export const shoppingCartSlice = createSlice({
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const addArticleToShoppingCart = (article: Article): AppThunk => (
+export const addArticleToShoppingCart = (subarticle: Subarticle): AppThunk => (
   dispatch
 ) => {
-  dispatch(shoppingCartSlice.actions.addArticleToShoppingCart(article));
+  dispatch(shoppingCartSlice.actions.addArticleToShoppingCart(subarticle));
   setTimeout(() => {
-    dispatch(shoppingCartSlice.actions.removeArticleFromRecentlyAdded(article));
+    dispatch(
+      shoppingCartSlice.actions.removeArticleFromRecentlyAdded(subarticle)
+    );
   }, 1500);
 };
 

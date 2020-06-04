@@ -1,15 +1,25 @@
-import React, { useEffect, Fragment, useState } from 'react';
-import { Button, Badge, Dropdown } from 'react-bootstrap';
+import React, { useEffect, Fragment } from 'react';
+import {
+  Button,
+  Badge,
+  Dropdown,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   shoppingCartSlice,
   shoppingCartArticlesCountSelector,
 } from '../../redux/slices/shoppingCartSlice';
-import { selectCategories } from '../../redux/slices/categoriesSlice';
+import {
+  selectCategories,
+  fetchCategories,
+  categoriesSlice,
+} from '../../redux/slices/categoriesSlice';
 import { isMobileOnly } from 'react-device-detect';
-import Login from '../../components/shared/Login';
-import { NavLink } from 'react-router-dom';
-import NewArticle from '../shared/NewArticle';
+import { userLoggedInState } from '../../redux/slices/userSlice';
+import Profile from '../navbar/Profile';
+import { fetchArticles } from '../../redux/slices/articlesSlice';
 
 // Component
 const Navbar = () => {
@@ -17,9 +27,11 @@ const Navbar = () => {
 
   const pendingCount = useSelector(shoppingCartArticlesCountSelector);
   const categories = useSelector(selectCategories);
+  const isUserLoggedIn = useSelector(userLoggedInState);
 
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showNewArticle, setShowNewArticle] = useState(false);
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     document
@@ -27,15 +39,16 @@ const Navbar = () => {
       .forEach((e) => {
         e.classList.remove('dropdown-toggle');
       });
-  }, []);
+  }, [isUserLoggedIn]);
+
+  const handleCategoryChange = (category) => {
+    dispatch(categoriesSlice.actions.setActive(category));
+    document.location.href = '#articles_container';
+    dispatch(fetchArticles());
+  };
 
   return (
     <Fragment>
-      <Login show={showLoginModal} onHide={(e) => setShowLoginModal(false)} />
-      <NewArticle
-        show={showNewArticle}
-        onHide={(e) => setShowNewArticle(false)}
-      />
       <header className='main_header'>
         <div className='brand'>
           <Dropdown>
@@ -54,43 +67,71 @@ const Navbar = () => {
 
             <Dropdown.Menu>
               {categories.map((category, idx) => (
-                <Dropdown.Item key={idx} href='#/action-1'>
+                <Dropdown.Item
+                  onClick={(e) => handleCategoryChange(category)}
+                  key={idx}
+                >
                   {category.name}
                 </Dropdown.Item>
               ))}
+              {isUserLoggedIn && (
+                <Dropdown.Item>
+                  <i className='fas fa-plus mr-2'></i>
+                  <span>Agregar categoria</span>
+                </Dropdown.Item>
+              )}
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <div className='actions ml-5'>
+        <div className='actions'>
           <Fragment>
-            <NavLink to='/home'>
+            <OverlayTrigger
+              placement={'bottom'}
+              overlay={<Tooltip id={'tooltip-home'}>Home</Tooltip>}
+            >
               <Button
                 variant='light'
                 className='mx-2 navbar_button navbar_home'
+                onClick={(e) => (document.location.href = '#home_container')}
               >
                 <i className='fas fa-home'></i>
               </Button>
-            </NavLink>
-            <NavLink to='/map'>
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement={'bottom'}
+              overlay={<Tooltip id={'tooltip-us'}>Contactanos</Tooltip>}
+            >
               <Button
                 variant='light'
                 className='mx-2 navbar_button navbar_home'
+                onClick={(e) => (document.location.href = '#contact_container')}
               >
                 <i className='fas fa-map-marked'></i>
               </Button>
-            </NavLink>
-            <Button variant='light' className='mx-2 navbar_button'>
-              <i className='fas fa-share-alt'></i>
-            </Button>
-            <Button
-              variant='light'
-              className='mx-2 navbar_button'
-              onClick={(e) =>
-                dispatch(shoppingCartSlice.actions.toggleShoppingCart())
-              }
+            </OverlayTrigger>
+            {/* <OverlayTrigger
+              placement={'bottom'}
+              overlay={<Tooltip id={'tooltip-share'}>Compartí</Tooltip>}
             >
-              <i className='fas fa-shopping-cart'></i>
-            </Button>
+              <Button variant='light' className='mx-2 navbar_button'>
+                <i className='fas fa-share-alt'></i>
+              </Button>
+            </OverlayTrigger> */}
+            <OverlayTrigger
+              placement={'bottom'}
+              overlay={<Tooltip id={'tooltip-cart'}>Carrito</Tooltip>}
+            >
+              <Button
+                variant='light'
+                className='mx-2 navbar_button'
+                onClick={(e) =>
+                  dispatch(shoppingCartSlice.actions.toggleShoppingCart())
+                }
+              >
+                <i className='fas fa-shopping-cart'></i>
+              </Button>
+            </OverlayTrigger>
+
             <Badge
               variant='primary'
               style={{
@@ -103,32 +144,7 @@ const Navbar = () => {
             </Badge>
           </Fragment>
         </div>
-        <div className='profile'>
-          {/* <Button variant='light' onClick={(e) => setShowLoginModal(true)}>
-            Iniciar Sesión
-          </Button> */}
-          <Dropdown>
-            <Dropdown.Toggle variant='primary' id='profile-dropdown'>
-              <i className='fas fa-user'></i>
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={(e) => setShowNewArticle(true)}
-                className='p-3 d-flex align-items-center justify-content-between'
-              >
-                Agregar articulo
-                <i className='fas fa-plus ml-3'></i>
-              </Dropdown.Item>
-              <Dropdown.Item className='p-3 d-flex align-items-center justify-content-between'>
-                Compras pendientes
-                <Badge variant='info' className='ml-3'>
-                  3
-                </Badge>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+        <Profile />
       </header>
     </Fragment>
   );

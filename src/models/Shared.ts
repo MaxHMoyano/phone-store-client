@@ -1,12 +1,42 @@
 export interface Article {
-  id?: String;
-  name: String;
-  description: String;
-  image: string;
-  price: Number;
+  id?: string;
+  name: string;
+  description?: string;
+  category?: string;
+  photo?: string;
+  active: boolean;
+  subarticles?: Subarticle[];
+}
+
+export interface Subarticle {
+  name: string;
+  price: number;
+  active: boolean;
+  disabled?: boolean;
+  article?: string;
+  id?: string;
 }
 
 export interface Category {
-  name: String;
-  selected: Boolean;
+  id: string;
+  name: string;
+  selected?: boolean;
+}
+
+export interface Transaction {
+  id?: string;
+  created_at?: FirebaseTimeStamp;
+  active?: boolean;
+  items: Item[];
+}
+
+export interface Item {
+  quantity: number;
+  subarticle: string;
+  name: string;
+}
+
+interface FirebaseTimeStamp {
+  _seconds: number;
+  _nanoseconds: number;
 }

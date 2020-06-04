@@ -1,42 +1,30 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
-import { Article } from '../../models/Shared';
+import { userService } from '../services/userService';
 
-interface ShoppingCart {
-  active: Boolean;
-  articles: Article[];
-  recentlyAdded: Article[];
+interface User {
+  loggedIn: Boolean;
+  loggingIn: Boolean;
 }
 
-const initialState: ShoppingCart = {
-  active: false,
-  articles: [],
-  recentlyAdded: [],
+const token = window.localStorage.getItem('token');
+const initialState: User = {
+  loggedIn: token ? true : false,
+  loggingIn: false,
 };
 
-export const shoppingCartSlice = createSlice({
-  name: 'shoppingCart',
+export const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
-    toggleShoppingCart: (state, action: PayloadAction<Boolean>) => {
-      if (action.payload) {
-        state.active = action.payload;
-      } else {
-        state.active = !state.active;
-      }
+    logUserRequest: (state) => {
+      state.loggingIn = true;
     },
-    addArticleToShoppingCart: (state, action: PayloadAction<Article>) => {
-      state.articles.push(action.payload);
-      state.recentlyAdded.push(action.payload);
+    logUserSuccess: (state) => {
+      state.loggedIn = true;
     },
-    removeArticleFromShoppingCart: (state, action: PayloadAction<Article>) => {
-      state.articles = state.articles.filter((e) => e.id !== action.payload.id);
-    },
-    removeArticleFromRecentlyAdded: (state, action: PayloadAction<Article>) => {
-      let idx = state.recentlyAdded.findIndex(
-        (e) => e.id === action.payload.id
-      );
-      state.recentlyAdded.splice(idx, 1);
+    logout: (state) => {
+      state.loggedIn = false;
     },
   },
 });
@@ -45,25 +33,22 @@ export const shoppingCartSlice = createSlice({
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched
-export const addArticleToShoppingCart = (article: Article): AppThunk => (
-  dispatch
-) => {
-  dispatch(shoppingCartSlice.actions.addArticleToShoppingCart(article));
-  setTimeout(() => {
-    dispatch(shoppingCartSlice.actions.removeArticleFromRecentlyAdded(article));
-  }, 1500);
+export const logUser = (email, password): AppThunk => (dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      dispatch(userSlice.actions.logUserRequest());
+      await userService.logUser(email, password);
+      dispatch(userSlice.actions.logUserSuccess());
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const shoppingCartStateSelector = (state: RootState) =>
-  state.shoppingCart.active;
-export const shoppingCartArticlesCountSelector = (state: RootState) =>
-  state.shoppingCart.articles.length;
-export const shoppingCartArticlesSelector = (state: RootState) =>
-  state.shoppingCart.articles;
-export const shoppingCartRecentlyAddedArticlesSelector = (state: RootState) =>
-  state.shoppingCart.recentlyAdded;
+export const userLoggedInState = (state: RootState) => state.user.loggedIn;
 
-export default shoppingCartSlice.reducer;
+export default userSlice.reducer;

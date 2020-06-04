@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans");
 
 // Bootstrap utilities
 
@@ -10,13 +10,16 @@ $primary: darken(
 );
 $secondary: #333;
 $light: #f0f2f5;
-$font-family-base: 'Roboto', sans-serif;
-@import '~bootstrap/scss/bootstrap';
+$font-family-base: "Roboto", sans-serif;
+@import "~bootstrap/scss/bootstrap";
 // @import '../../node_modules/react-multi-carousel/lib/styles.css';
 
 // Override theme
 
 // Custom styles
-@import './layout';
-@import './components';
-@import './mobile';
+@import "./components";
+@import "./mobile";
+@import "./tablet.scss";
+@import "./tablet_landscape.scss";
+@import "./desktop";
+@import "./widescreen";
