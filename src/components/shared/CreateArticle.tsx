@@ -20,7 +20,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
 import { fetchArticles } from '../../redux/slices/articlesSlice';
 import { categoriesService } from '../../redux/services/categoriesService';
-import { create } from 'domain';
 import CategoriesModal from './CategoriesModal';
 
 const CreateArticle = (props) => {

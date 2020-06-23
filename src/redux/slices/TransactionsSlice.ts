@@ -1,8 +1,7 @@
-import { Transaction, Item } from '../../models/Shared';
+import { Transaction } from '../../models/Shared';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { transactionsService } from '../services/transactionsService';
-import { articlesService } from '../services/articlesService';
 
 interface TransactionState {
   data: Transaction[];

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from '../../assets/logo.png';
 import { Carousel, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,6 @@ import { isMobile } from 'react-device-detect';
 import CreateNews from '../../components/shared/CreateNews';
 import { userLoggedInState } from '../../redux/slices/userSlice';
 import { News } from '../../models/Shared';
-import { newsService } from '../../redux/services/newsService';
 import DeleteNewsConfirm from '../../components/shared/ConfirmDeleteNews';
 
 const Home = () => {
