@@ -36,46 +36,39 @@ const Navbar = () => {
         <div className='brand'>
           <Categories />
         </div>
-        <div className='actions'>
+        <div className='instagram'>
+          <Button
+            variant={'link'}
+            onClick={(e) =>
+              window.open(
+                'https://www.instagram.com/tiendacoolcovers/',
+                '_blank'
+              )
+            }
+          >
+            @TiendaCoolCovers
+          </Button>
+        </div>
+        <div className='actions d-flex align-items-center'>
           <Fragment>
             <OverlayTrigger
               placement={'bottom'}
               overlay={<Tooltip id={'tooltip-home'}>Home</Tooltip>}
             >
               <Button
-                variant='light'
+                variant='dark'
                 className='mx-2 navbar_button navbar_home'
                 onClick={(e) => (document.location.href = '#home_container')}
               >
                 <i className='fas fa-home'></i>
               </Button>
             </OverlayTrigger>
-            {/* <OverlayTrigger
-              placement={'bottom'}
-              overlay={<Tooltip id={'tooltip-us'}>Contactanos</Tooltip>}
-            >
-              <Button
-                variant='light'
-                className='mx-2 navbar_button navbar_home'
-                onClick={(e) => (document.location.href = '#contact_container')}
-              >
-                <i className='fas fa-map-marked'></i>
-              </Button>
-            </OverlayTrigger> */}
-            {/* <OverlayTrigger
-              placement={'bottom'}
-              overlay={<Tooltip id={'tooltip-share'}>Compartí</Tooltip>}
-            >
-              <Button variant='light' className='mx-2 navbar_button'>
-                <i className='fas fa-share-alt'></i>
-              </Button>
-            </OverlayTrigger> */}
             <OverlayTrigger
               placement={'bottom'}
               overlay={<Tooltip id={'tooltip-cart'}>Carrito</Tooltip>}
             >
               <Button
-                variant='light'
+                variant='dark'
                 className='mx-2 navbar_button'
                 onClick={(e) =>
                   dispatch(shoppingCartSlice.actions.toggleShoppingCart())

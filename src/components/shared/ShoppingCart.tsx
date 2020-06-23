@@ -22,16 +22,16 @@ const ShoppingCart = () => {
     let transaction: Transaction = {
       items: shoppingCardArticles,
     };
-    setIsSubmitting(true);
-    await transactionsService.createTransaction(transaction);
-    dispatch(shoppingCartSlice.actions.toggleShoppingCart());
-    let request = '';
+    // setIsSubmitting(true);
+    // await transactionsService.createTransaction(transaction);
+    // dispatch(shoppingCartSlice.actions.toggleShoppingCart());
+    let request: string = '';
     shoppingCardArticles.forEach((item) => {
       request += `${item.quantity} de ${item.name} %0a`;
     });
-    setIsSubmitting(false);
+    // setIsSubmitting(false);
     window.open(
-      `https://api.whatsapp.com/send?phone=0123456789&text=Hola%2C%20Te%20paso%20mi%20pedido%20de:%0a ${request}`,
+      `https://api.whatsapp.com/send?phone=+54%209%203516%2059-4157&text=Hola%2C%20Te%20paso%20mi%20pedido%20de:%0a ${request}`,
       '_blank'
     );
   };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Dropdown, Badge, Button } from 'react-bootstrap';
+import { Dropdown, Badge, Button } from 'react-bootstrap';
 import {
   addArticleToShoppingCart,
   shoppingCartSlice,
@@ -82,7 +82,7 @@ export default function Articles() {
         className={
           'd-flex justify-content-center align-items-center flex-column'
         }
-        style={{ margin: '2.5rem 0 0 0' }}
+        style={{ margin: '2.5rem 0 2.5rem 0' }}
       >
         <i className='fas fa-battery-empty fa-3x'></i>
         <span className='mt-4'>No hay nada!</span>
@@ -97,7 +97,7 @@ export default function Articles() {
         className={
           'd-flex justify-content-center align-items-center flex-column'
         }
-        style={{ margin: '2.5rem 0 0 0' }}
+        style={{ margin: '2.5rem 0 2.5rem 0' }}
       >
         <i className='fas fa-spin fa-spinner fa-3x'></i>
         <span className='mt-4'>Cargando productos . . .</span>
@@ -106,18 +106,24 @@ export default function Articles() {
   }
 
   return (
-    <div id={'articles_container'} style={{ margin: '2.5rem 0 0 0' }}>
+    <div id={'articles_container'} style={{ margin: '2.5rem 0 2.5rem 0' }}>
       <CreateArticle
         show={showCreateArticleModal}
-        onHide={(e) => setShowCreateArticleModal(false)}
+        onHide={(e) => {
+          setShowCreateArticleModal(false);
+          setSelectedArticle(null);
+        }}
         articleId={selectedArticle ? selectedArticle.id : ''}
       />
       <DeleteArticle
         show={showDeleteArticleModal}
-        onHide={(e) => setShowDeleteArticleModal(false)}
+        onHide={(e) => {
+          setShowDeleteArticleModal(false);
+          setSelectedArticle(null);
+        }}
         articleId={selectedArticle ? selectedArticle.id : ''}
       />
-      <h3>
+      <h3 className={'mb-4'}>
         {selectedCategory && (
           <Badge variant='info'>
             <span>{selectedCategory.name}</span>
@@ -130,11 +136,7 @@ export default function Articles() {
       </h3>
       <div className='articles_container'>
         {articles.map((article: Article, idx) => (
-          <Card
-            key={idx}
-            style={{ boxShadow: '5px 10px 16px #acacac' }}
-            className={`article`}
-          >
+          <div key={idx} className={`article`}>
             {isLoggedIn && (
               <div style={{ position: 'absolute', right: 0, padding: '.5rem' }}>
                 <Button
@@ -154,14 +156,12 @@ export default function Articles() {
                 </Button>
               </div>
             )}
-            <Card.Img variant='top' src={article.photo} height='200' />
-            <Card.Body className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex flex-column'>
-                <Card.Title className='mb-1'>{article.name}</Card.Title>
+            <img alt={'article_image'} src={article.photo} />
+            <div className='article_content'>
+              <div className='article_description'>
+                <h3 className='mb-1'>{article.name}</h3>
                 {article.active && (
-                  <Card.Title className='text-success mb-0'>
-                    {'En stock'}
-                  </Card.Title>
+                  <h3 className='text-success mb-0'>{'En stock'}</h3>
                 )}
               </div>
               {article.active ? (
@@ -177,30 +177,33 @@ export default function Articles() {
                   <Dropdown.Menu>
                     {article.subarticles &&
                       article.subarticles.length > 0 &&
-                      article.subarticles.map((subarticle: Subarticle, idx) => (
-                        <Dropdown.Item
-                          key={idx}
-                          disabled={!subarticle.active}
-                          onClick={(e) => addArticleToCart(subarticle)}
-                        >
-                          <span
-                            style={{
-                              textDecoration: subarticle.active
-                                ? ''
-                                : 'line-through',
-                            }}
-                          >
-                            {subarticle.name} - ${subarticle.price}
-                          </span>
-                        </Dropdown.Item>
-                      ))}
+                      article.subarticles.map(
+                        (subarticle: Subarticle, idx) =>
+                          !subarticle.disabled && (
+                            <Dropdown.Item
+                              key={idx}
+                              disabled={!subarticle.active}
+                              onClick={(e) => addArticleToCart(subarticle)}
+                            >
+                              <span
+                                style={{
+                                  textDecoration: subarticle.active
+                                    ? ''
+                                    : 'line-through',
+                                }}
+                              >
+                                {subarticle.name} - ${subarticle.price}
+                              </span>
+                            </Dropdown.Item>
+                          )
+                      )}
                   </Dropdown.Menu>
                 </Dropdown>
               ) : (
                 <span className={'text-danger'}>Sin stock</span>
               )}
-            </Card.Body>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
     </div>

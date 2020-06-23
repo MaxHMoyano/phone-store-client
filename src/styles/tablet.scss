@@ -1,9 +1,6 @@
 @media only screen and (min-width: 768px) {
   .articles_container {
-    grid-template-columns: repeat(2, 1fr);
-    .article {
-      width: auto;
-    }
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .main_container {

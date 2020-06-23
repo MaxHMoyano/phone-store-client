@@ -18,7 +18,10 @@ import { articlesService } from '../../redux/services/articlesService';
 import { selectCategories } from '../../redux/slices/categoriesSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { fetchArticles } from '../../redux/slices/articlesSlice';
+import {
+  fetchArticles,
+  updateSubarticle,
+} from '../../redux/slices/articlesSlice';
 import { categoriesService } from '../../redux/services/categoriesService';
 import CategoriesModal from './CategoriesModal';
 
@@ -51,6 +54,8 @@ const CreateArticle = (props) => {
         price: yup.number(),
         active: yup.boolean(),
         id: yup.string().nullable(),
+        article: yup.string().nullable(),
+        disabled: yup.boolean(),
       })
     ),
   });
@@ -94,15 +99,15 @@ const CreateArticle = (props) => {
           await articlesService.updateArticle(article);
           await uploadPhoto(article.id);
           formik.values.subarticles.forEach(async (subarticle: Subarticle) => {
-            console.log('for each');
             await articlesService.updateSubarticle({
               ...subarticle,
               name: `${article.name} (${subarticle.name})`,
             });
           });
         }
-        setSubmitting(false);
         await dispatch(fetchArticles());
+        setSubmitting(false);
+        resetForm();
         props.onHide();
       } catch (error) {
         console.error(error);
@@ -112,23 +117,24 @@ const CreateArticle = (props) => {
 
   const uploadPhoto = async (articleId): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
-      // Subo la foto
-      let files: FileList = (document.getElementById(
-        'image-file-upload'
-      ) as HTMLInputElement).files;
-      if (files.length) {
-        await articlesService.uploadArticlePhoto(articleId, files[0]);
+      try {
+        // Subo la foto
+        let files: FileList = (document.getElementById(
+          'image-file-upload'
+        ) as HTMLInputElement).files;
+        if (files.length) {
+          await articlesService.uploadArticlePhoto(articleId, files[0]);
+        }
         resolve(true);
-      } else if (isPhotoUploaded) {
-        resolve(true);
-      } else {
-        reject();
+      } catch (error) {
+        console.error(error);
+        reject(error);
       }
     });
   };
 
   useEffect(() => {
-    if (props.articleId) {
+    if (props.articleId && props.show) {
       articlesService.getArticle(props.articleId).then(async (article) => {
         let category = await categoriesService.getCategory(article.category);
         setPhotoUrl(article.photo);
@@ -161,6 +167,8 @@ const CreateArticle = (props) => {
         price: formik.values.basePrice,
         active: formik.values.active,
         id: null,
+        subarticle: null,
+        disabled: false,
       },
     ]);
   };
@@ -173,7 +181,28 @@ const CreateArticle = (props) => {
     }
   };
 
-  const handleDeletedItem = (idx) => {};
+  const [isUpdatingSubarticle, setIsUpdatingSubarticle] = useState<boolean>(
+    false
+  );
+  const handleDeletedSubarticle = async (subarticle: Subarticle, idx) => {
+    if (props.articleId) {
+      setIsUpdatingSubarticle(true);
+      let updatedSubarticle: Subarticle = {
+        ...subarticle,
+        name: `${formik.values.name} (${subarticle.name})`,
+        disabled: !subarticle.disabled,
+      };
+      await dispatch(updateSubarticle(updatedSubarticle));
+      let values = formik.values.subarticles;
+      values[idx].disabled = !subarticle.disabled;
+      formik.setFieldValue('subarticles', values);
+      setIsUpdatingSubarticle(false);
+    } else {
+      let values = formik.values.subarticles;
+      values.splice(idx, 1);
+      formik.setFieldValue('subarticles', values);
+    }
+  };
 
   const handleCloseModal = () => {
     props.onHide();
@@ -187,7 +216,6 @@ const CreateArticle = (props) => {
         onHide={(e) => setShowManageCategoriesModal(false)}
       />
       <Modal onHide={props.onHide} show={props.show} size={'xl'} centered>
-        {/* {JSON.stringify(formik.errors)} */}
         <Form autoComplete={'off'} onSubmit={formik.handleSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>Nuevo articulo</Modal.Title>
@@ -326,61 +354,86 @@ const CreateArticle = (props) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {formik.values.subarticles.map((item, idx) => (
-                          <tr key={idx}>
-                            <td>
-                              <Form.Control
-                                value={item.name}
-                                onChange={(e) =>
-                                  formik.setFieldValue(
-                                    `subarticles[${idx}].name`,
-                                    e.target.value
-                                  )
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Form.Control
-                                value={item.price}
-                                type={'number'}
-                                onChange={(e) =>
-                                  formik.setFieldValue(
-                                    `subarticles[${idx}].price`,
-                                    e.target.value
-                                  )
-                                }
-                              />
-                            </td>
-                            <td
-                              style={{
-                                verticalAlign: 'middle',
-                                textAlign: 'center',
-                              }}
-                            >
-                              <Form.Check
-                                custom
-                                type={'checkbox'}
-                                id={`article-active-checkbox-${idx}`}
-                                checked={item.active}
-                                label={''}
-                                onChange={(e) =>
-                                  formik.setFieldValue(
-                                    `subarticles[${idx}].active`,
-                                    !item.active
-                                  )
-                                }
-                              />
-                            </td>
-                            <td>
-                              <Button
-                                variant={'danger'}
-                                onClick={(e) => handleDeletedItem(idx)}
+                        {formik.values.subarticles.map(
+                          (subarticle: Subarticle, idx) => (
+                            <tr key={idx}>
+                              <td>
+                                <Form.Control
+                                  disabled={subarticle.disabled}
+                                  value={subarticle.name}
+                                  onChange={(e) =>
+                                    formik.setFieldValue(
+                                      `subarticles[${idx}].name`,
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <Form.Control
+                                  disabled={subarticle.disabled}
+                                  value={subarticle.price}
+                                  type={'number'}
+                                  onChange={(e) =>
+                                    formik.setFieldValue(
+                                      `subarticles[${idx}].price`,
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td
+                                style={{
+                                  verticalAlign: 'middle',
+                                  textAlign: 'center',
+                                }}
                               >
-                                <i className='fas fa-times'></i>
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
+                                <Form.Check
+                                  disabled={subarticle.disabled}
+                                  custom
+                                  type={'checkbox'}
+                                  id={`article-active-checkbox-${idx}`}
+                                  checked={subarticle.active}
+                                  label={''}
+                                  onChange={(e) =>
+                                    formik.setFieldValue(
+                                      `subarticles[${idx}].active`,
+                                      !subarticle.active
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <OverlayTrigger
+                                  placement={'bottom'}
+                                  overlay={
+                                    <Tooltip id={'tooltip-article'}>
+                                      {props.articleId && subarticle.disabled
+                                        ? 'Habilitar'
+                                        : 'Deshabilitar'}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Button
+                                    disabled={isUpdatingSubarticle}
+                                    variant={
+                                      subarticle.disabled ? 'success' : 'danger'
+                                    }
+                                    onClick={(e) =>
+                                      handleDeletedSubarticle(subarticle, idx)
+                                    }
+                                  >
+                                    {subarticle.disabled ? (
+                                      <i className='fas fa-check'></i>
+                                    ) : (
+                                      <i className='fas fa-times'></i>
+                                    )}
+                                  </Button>
+                                </OverlayTrigger>
+                              </td>
+                            </tr>
+                          )
+                        )}
                       </tbody>
                     </Table>
                   </Col>
@@ -441,7 +494,7 @@ const CreateArticle = (props) => {
               {formik.isSubmitting ? (
                 <i className='fas fa-spinner fa-spin'></i>
               ) : (
-                <span>Agregar</span>
+                <span>Guardar</span>
               )}
             </Button>
           </Modal.Footer>

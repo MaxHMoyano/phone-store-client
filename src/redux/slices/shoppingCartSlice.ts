@@ -26,11 +26,19 @@ export const shoppingCartSlice = createSlice({
       }
     },
     addArticleToShoppingCart: (state, action: PayloadAction<Subarticle>) => {
-      state.articles.push({
-        subarticle: action.payload.id,
-        quantity: 1,
-        name: action.payload.name,
-      });
+      let idx = state.articles.findIndex(
+        (e) => e.subarticle === action.payload.id
+      );
+
+      if (idx === -1) {
+        state.articles.push({
+          subarticle: action.payload.id,
+          quantity: 1,
+          name: action.payload.name,
+        });
+      } else {
+        state.articles[idx].quantity += 1;
+      }
       state.recentlyAdded.push(action.payload);
     },
     removeArticleFromShoppingCart: (state, action: PayloadAction<Item>) => {

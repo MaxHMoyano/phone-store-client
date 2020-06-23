@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans");
 
-// Bootstrap utilities
-
+// Colors
 $dark: #3b3d38;
 // $primary: #efe64a;
 $primary: darken(
@@ -10,7 +9,11 @@ $primary: darken(
 );
 $secondary: #333;
 $light: #f0f2f5;
+
+// Bootstrap variables changes
 $font-family-base: "Roboto", sans-serif;
+$card-bg: #222;
+$card-border-radius: 5%;
 @import "~bootstrap/scss/bootstrap";
 // @import '../../node_modules/react-multi-carousel/lib/styles.css';
 

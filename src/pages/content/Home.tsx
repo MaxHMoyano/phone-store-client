@@ -52,28 +52,23 @@ const Home = () => {
         onHide={(e) => setShowDeleteNewsModal(false)}
       />
       <div className='branding'>
-        <div>
-          <img src={Logo} alt='' />
-        </div>
-        <div>
-          <h1 style={{ fontSize: '3rem' }}>Tienda CoolCovers</h1>
-          <p style={{ fontSize: '1.5rem' }}>
-            Tienda de accesorios premium, y servicio técnico especializado en
-            iPhones
-          </p>
-        </div>
+        {/* <h1>Tienda CoolCovers</h1> */}
+        <img src={Logo} alt='' />
+        <p>Renovate!</p>
       </div>
-      {!newsPending && !news.length && isUserLoggedIn ? (
+      {!newsPending && !news.length ? (
         <div className={'d-flex flex-column align-items-center '}>
           <i className='fas fa-battery-empty fa-3x'></i>
           <span className='mt-1 mb-2'>No hay novedades!</span>
-          <Button
-            variant={'dark'}
-            className={'mx-2'}
-            onClick={(e) => setShowCreateNewsModal(true)}
-          >
-            Agregar
-          </Button>
+          {isUserLoggedIn && (
+            <Button
+              variant={'dark'}
+              className={'mx-2'}
+              onClick={(e) => setShowCreateNewsModal(true)}
+            >
+              Agregar
+            </Button>
+          )}
         </div>
       ) : (
         <div className='home_carousel'>
@@ -83,7 +78,7 @@ const Home = () => {
               <i className='fas fa-spin fa-spinner fa-2x'></i>
             </div>
           ) : (
-            <Carousel interval={null}>
+            <Carousel interval={7000}>
               {news.map((element, idx) => (
                 <Carousel.Item key={idx}>
                   <img

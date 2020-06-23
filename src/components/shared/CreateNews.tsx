@@ -26,10 +26,12 @@ const CreateNews = (props) => {
           'image-file-upload-mobile'
         ) as HTMLInputElement).files;
         if (desktopFiles.length && mobileFiles.length) {
-          let formData = new FormData();
-          formData.append('img_desktop', desktopFiles[0]);
-          formData.append('img_mobile', mobileFiles[0]);
-          await newsService.createNews(formData);
+          let firstFormData = new FormData();
+          firstFormData.append('img_desktop', desktopFiles[0]);
+          let firstPart = await newsService.createNews(firstFormData);
+          let secondPartFormData = new FormData();
+          secondPartFormData.append('img_mobile', mobileFiles[0]);
+          await newsService.updateNews(firstPart.id, secondPartFormData);
           await dispatch(fetchNews());
           setIsSubmitting(false);
           props.onHide();

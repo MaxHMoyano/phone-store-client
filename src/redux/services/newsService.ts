@@ -1,5 +1,6 @@
 import { handleResponse } from '../../util/serverResponse';
 import axios from 'axios';
+import { News } from '../../models/Shared';
 
 export const newsService = {
   fetchNews,
@@ -9,21 +10,21 @@ export const newsService = {
   deleteNews,
 };
 
-function fetchNews() {
+function fetchNews(): Promise<News[]> {
   return axios
     .get(
       `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/news/`
     )
     .then(handleResponse);
 }
-function getNews(newsId: string) {
+function getNews(newsId: string): Promise<News> {
   return axios
     .get(
       `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/news/${newsId}`
     )
     .then(handleResponse);
 }
-function createNews(news: FormData) {
+function createNews(news: FormData): Promise<News> {
   return axios
     .post(
       `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/news/`,
@@ -36,10 +37,10 @@ function createNews(news: FormData) {
     )
     .then(handleResponse);
 }
-function updateNews(news) {
+function updateNews(newsId: string, news: FormData): Promise<News> {
   return axios
-    .patch(
-      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/news/${news.id}`,
+    .post(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/news/${newsId}`,
       news
     )
     .then(handleResponse);

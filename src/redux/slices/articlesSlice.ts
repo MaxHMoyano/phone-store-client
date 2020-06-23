@@ -1,4 +1,4 @@
-import { Article } from '../../models/Shared';
+import { Article, Subarticle } from '../../models/Shared';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { articlesService } from '../services/articlesService';
@@ -35,6 +35,17 @@ export const articlesSlice = createSlice({
       state.error = action.payload;
       state.pending = false;
     },
+    updateSubarticle: (state, action: PayloadAction<Subarticle>) => {
+      let articleIdx = state.data.findIndex(
+        (e) => e.id === action.payload.article
+      );
+      let subarticleIdx = state.data[articleIdx].subarticles.findIndex(
+        (e) => e.id === action.payload.id
+      );
+      state.data[articleIdx].subarticles[subarticleIdx] = {
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -55,6 +66,20 @@ export const fetchArticles = (
       );
       dispatch(articlesSlice.actions.success(articles));
       resolve(articles);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const updateSubarticle = (subarticle: Subarticle): AppThunk => (
+  dispatch
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await articlesService.updateSubarticle(subarticle);
+      dispatch(articlesSlice.actions.updateSubarticle(subarticle));
+      resolve();
     } catch (error) {
       reject(error);
     }
