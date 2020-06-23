@@ -7,7 +7,7 @@ import {
   shoppingCartSlice,
 } from '../../redux/slices/shoppingCartSlice';
 import { Card, Button, Form } from 'react-bootstrap';
-import { Article, Transaction } from '../../models/Shared';
+import { Transaction } from '../../models/Shared';
 import { transactionsService } from '../../redux/services/transactionsService';
 
 const ShoppingCart = () => {
@@ -17,11 +17,6 @@ const ShoppingCart = () => {
   const shoppingCardArticles = useSelector(shoppingCartArticlesSelector);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const sendWhastappMessage = () => {
-    const url = `https://api.whatsapp.com/send?phone=0123456789&text=I'm%20interested%20in%20your%20services" target="_blank"`;
-    const example = `=Hola%2C%20Te%20paso%20mi%20pedido%20de%20*Cat%C3%A1logo%20Digital*%3A%0D%0A%0D%0A1%20x%20Auricular%20Air%20Power%20Foxbox%20(Plata)%20%235762%20-%20%243999%2C00%20%2F%20%243999%2C00%0D%0A%0D%0A%0D%0A*El%20total%20es%20%243999*%0D%0A%0D%0A_%C2%A1Muchas%20Gracias!_%0D%0A%0D%0ASaludos`;
-  };
 
   const sendMessageAndSaveTransaction = async () => {
     let transaction: Transaction = {

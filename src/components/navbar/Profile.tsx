@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, Badge, Button } from 'react-bootstrap';
 import Login from '../shared/Login';
 import CreateArticle from '../shared/CreateArticle';
@@ -74,7 +73,5 @@ const Profile = (props) => {
     </Fragment>
   );
 };
-
-Profile.propTypes = {};
 
 export default Profile;

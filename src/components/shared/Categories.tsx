@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { isMobileOnly } from 'react-device-detect';
 import { useSelector, useDispatch } from 'react-redux';
 import { Category } from '../../models/Shared';
