@@ -11,12 +11,28 @@ export const articlesService = {
   uploadArticlePhoto,
   createSubarticles,
   getSubarticle,
+  updateSubarticle,
 };
 
-function fetchArticles(): Promise<Article[]> {
+interface RequestFilter {
+  sort_by?: string;
+  filter_by?: string;
+}
+
+function fetchArticles(
+  filterBy: string = '',
+  sortBy: string = ''
+): Promise<Article[]> {
+  let params: RequestFilter = {
+    filter_by: filterBy ? filterBy : null,
+    sort_by: sortBy ? sortBy : null,
+  };
   return axios
     .get(
-      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/`
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/articles/`,
+      {
+        params,
+      }
     )
     .then(handleResponse);
 }
@@ -81,6 +97,15 @@ function getSubarticle(subarticleId: String): Promise<Subarticle> {
   return axios
     .get(
       `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/subarticles/${subarticleId}`
+    )
+    .then(handleResponse);
+}
+
+function updateSubarticle(subarticle: Subarticle): Promise<Subarticle> {
+  return axios
+    .patch(
+      `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_VERSION}/subarticles/${subarticle.id}`,
+      subarticle
     )
     .then(handleResponse);
 }

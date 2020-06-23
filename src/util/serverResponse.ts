@@ -7,11 +7,14 @@ function logout() {
 
 export const handleResponse = (response: AxiosResponse) => {
   // console.log(response);
-  if (response.status === 401 || response.status === 403) {
-    window.localStorage.removeItem('token');
-    logout();
-    window.location.reload(true);
-  } else {
-    return response.data;
+  if (response) {
+    if (response.status === 401 || response.status === 403) {
+      window.localStorage.removeItem('token');
+      logout();
+      window.location.reload(true);
+    } else {
+      return response.data;
+    }
   }
+  throw new Error('Response error');
 };

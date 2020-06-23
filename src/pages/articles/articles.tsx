@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Dropdown, Badge, Button } from 'react-bootstrap';
 import {
@@ -8,10 +8,14 @@ import {
 import {
   selectArticles,
   fetchArticles,
+  selectArticlesPendingState,
 } from '../../redux/slices/articlesSlice';
 import { fetchTransactions } from '../../redux/slices/TransactionsSlice';
 import { Article, Subarticle } from '../../models/Shared';
-import { selectSelectedCategory } from '../../redux/slices/categoriesSlice';
+import {
+  selectSelectedCategory,
+  categoriesSlice,
+} from '../../redux/slices/categoriesSlice';
 import { userLoggedInState } from '../../redux/slices/userSlice';
 import CreateArticle from '../../components/shared/CreateArticle';
 import DeleteArticle from '../../components/shared/DeleteArticle';
@@ -22,6 +26,7 @@ export default function Articles() {
   const isLoggedIn = useSelector(userLoggedInState);
   const articles = useSelector(selectArticles);
   const selectedCategory = useSelector(selectSelectedCategory);
+  const articlesPending = useSelector(selectArticlesPendingState);
 
   const [showDeleteArticleModal, setShowDeleteArticleModal] = useState<boolean>(
     false
@@ -62,12 +67,37 @@ export default function Articles() {
     setShowCreateArticleModal(true);
   };
 
-  if (!articles.length) {
+  const deleteSelectedCategory = async () => {
+    try {
+      dispatch(categoriesSlice.actions.removeActive());
+      dispatch(fetchArticles());
+    } catch (error) {}
+  };
+
+  // Empty articles
+  if (!articlesPending && !articles.length) {
     return (
       <div
+        id={'articles_container'}
         className={
           'd-flex justify-content-center align-items-center flex-column'
         }
+        style={{ margin: '2.5rem 0 0 0' }}
+      >
+        <i className='fas fa-battery-empty fa-3x'></i>
+        <span className='mt-4'>No hay nada!</span>
+      </div>
+    );
+  }
+
+  if (articlesPending) {
+    return (
+      <div
+        id={'articles_container'}
+        className={
+          'd-flex justify-content-center align-items-center flex-column'
+        }
+        style={{ margin: '2.5rem 0 0 0' }}
       >
         <i className='fas fa-spin fa-spinner fa-3x'></i>
         <span className='mt-4'>Cargando productos . . .</span>
@@ -76,7 +106,7 @@ export default function Articles() {
   }
 
   return (
-    <Fragment>
+    <div id={'articles_container'} style={{ margin: '2.5rem 0 0 0' }}>
       <CreateArticle
         show={showCreateArticleModal}
         onHide={(e) => setShowCreateArticleModal(false)}
@@ -89,11 +119,16 @@ export default function Articles() {
       />
       <h3>
         {selectedCategory && (
-          <Badge variant='info'>{selectedCategory.name}</Badge>
+          <Badge variant='info'>
+            <span>{selectedCategory.name}</span>
+            <i
+              onClick={deleteSelectedCategory}
+              className='badge_icon fas fa-times ml-3'
+            ></i>
+          </Badge>
         )}
       </h3>
-      <hr />
-      <div id={'articles_container'} className='articles_container'>
+      <div className='articles_container'>
         {articles.map((article: Article, idx) => (
           <Card
             key={idx}
@@ -168,6 +203,6 @@ export default function Articles() {
           </Card>
         ))}
       </div>
-    </Fragment>
+    </div>
   );
 }

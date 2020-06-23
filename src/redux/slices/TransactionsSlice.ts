@@ -53,11 +53,8 @@ export const fetchTransactions = (): AppThunk => (dispatch) => {
     try {
       dispatch(transactionsSlice.actions.request());
       const transactions: Transaction[] = await transactionsService.fetchTransactions();
-      let mappedTransaction = await Promise.all(
-        transactions.map(mapTransaction)
-      );
-      dispatch(transactionsSlice.actions.success(mappedTransaction));
-      resolve(mappedTransaction);
+      dispatch(transactionsSlice.actions.success(transactions));
+      resolve(transactions);
     } catch (error) {
       dispatch(transactionsSlice.actions.failure(error));
       reject(error);
@@ -91,27 +88,3 @@ export const selectTransactionsPendingStatus = (state: RootState) =>
   state.transactions.pending;
 
 export default transactionsSlice.reducer;
-
-const mapTransaction = (transaction: Transaction): Promise<Transaction> => {
-  return new Promise(async (resolve, reject) => {
-    let mappedItems: Item[] = await Promise.all(
-      transaction.items.map(
-        (item): Promise<Item> => {
-          return new Promise(async (resolve, reject) => {
-            let subarticle = await articlesService.getSubarticle(
-              item.subarticle
-            );
-            resolve({
-              ...item,
-              name: subarticle.name,
-            });
-          });
-        }
-      )
-    );
-    resolve({
-      ...transaction,
-      items: mappedItems,
-    });
-  });
-};

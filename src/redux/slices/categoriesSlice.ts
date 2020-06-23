@@ -29,6 +29,7 @@ export const categoriesSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     success: (state, action: PayloadAction<Category[]>) => {
       state.data = action.payload;
+      state.pending = false;
     },
     setActive: (state, action: PayloadAction<Category>) => {
       state.data = state.data.map((e) => {
@@ -38,6 +39,14 @@ export const categoriesSlice = createSlice({
             selected: true,
           };
         }
+        return {
+          ...e,
+          selected: false,
+        };
+      });
+    },
+    removeActive: (state) => {
+      state.data = state.data.map((e) => {
         return {
           ...e,
           selected: false,
@@ -69,6 +78,8 @@ export const fetchCategories = (): AppThunk => (dispatch) => {
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectCategories = (state: RootState) => state.categories.data;
+export const selectedCategoriesPendingState = (state: RootState) =>
+  state.categories.pending;
 export const selectSelectedCategory = (state: RootState) =>
   state.categories.data.find((e) => e.selected);
 

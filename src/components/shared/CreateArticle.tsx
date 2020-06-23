@@ -20,6 +20,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
 import { fetchArticles } from '../../redux/slices/articlesSlice';
 import { categoriesService } from '../../redux/services/categoriesService';
+import { create } from 'domain';
+import CategoriesModal from './CategoriesModal';
 
 const CreateArticle = (props) => {
   const dispatch = useDispatch();
@@ -27,7 +29,10 @@ const CreateArticle = (props) => {
   const categories = useSelector(selectCategories);
 
   const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState('initialState');
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [showManageCategoriesModal, setShowManageCategoriesModal] = useState<
+    boolean
+  >(false);
 
   const articleScheme = yup.object<Article>().shape({
     name: yup.string().required('El nombre es requerido'),
@@ -46,6 +51,7 @@ const CreateArticle = (props) => {
         name: yup.string(),
         price: yup.number(),
         active: yup.boolean(),
+        id: yup.string().nullable(),
       })
     ),
   });
@@ -76,7 +82,7 @@ const CreateArticle = (props) => {
           let createdArticle = await articlesService.createArticle(article);
           // Creo los sub articulos
           let articleItems: Subarticle[] = values.subarticles.map((item) => ({
-            name: item.name,
+            name: `${createdArticle.name} (${item.name})`,
             price: item.price,
             active: item.active,
           }));
@@ -84,21 +90,28 @@ const CreateArticle = (props) => {
             createdArticle.id,
             articleItems
           );
-          let isPhotoUploaded = await uploadPhoto(createdArticle.id);
+          await uploadPhoto(createdArticle.id);
         } else {
-          let updatedArticle = await articlesService.updateArticle(article);
-          let isPhotoUploaded = await uploadPhoto(article.id);
+          await articlesService.updateArticle(article);
+          await uploadPhoto(article.id);
+          formik.values.subarticles.forEach(async (subarticle: Subarticle) => {
+            console.log('for each');
+            await articlesService.updateSubarticle({
+              ...subarticle,
+              name: `${article.name} (${subarticle.name})`,
+            });
+          });
         }
         setSubmitting(false);
+        await dispatch(fetchArticles());
         props.onHide();
-        dispatch(fetchArticles());
       } catch (error) {
         console.error(error);
       }
     },
   });
 
-  const uploadPhoto = (articleId): Promise<boolean> => {
+  const uploadPhoto = async (articleId): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
       // Subo la foto
       let files: FileList = (document.getElementById(
@@ -107,6 +120,10 @@ const CreateArticle = (props) => {
       if (files.length) {
         await articlesService.uploadArticlePhoto(articleId, files[0]);
         resolve(true);
+      } else if (isPhotoUploaded) {
+        resolve(true);
+      } else {
+        reject();
       }
     });
   };
@@ -121,8 +138,13 @@ const CreateArticle = (props) => {
           name: article.name,
           description: article.description,
           active: article.active,
-          subarticles: article.subarticles,
-          basePrice: 0,
+          subarticles: article.subarticles.map((subarticle) => ({
+            ...subarticle,
+            name: subarticle.name.split('(')[1].replace(/([()])/g, ''),
+          })),
+          basePrice: article.subarticles.length
+            ? article.subarticles[0].price
+            : 0,
           category: {
             label: category.name,
             value: category.id,
@@ -139,6 +161,7 @@ const CreateArticle = (props) => {
         name: '',
         price: formik.values.basePrice,
         active: formik.values.active,
+        id: null,
       },
     ]);
   };
@@ -160,6 +183,10 @@ const CreateArticle = (props) => {
 
   return (
     <Fragment>
+      <CategoriesModal
+        show={showManageCategoriesModal}
+        onHide={(e) => setShowManageCategoriesModal(false)}
+      />
       <Modal onHide={props.onHide} show={props.show} size={'xl'} centered>
         {/* {JSON.stringify(formik.errors)} */}
         <Form autoComplete={'off'} onSubmit={formik.handleSubmit}>
@@ -221,6 +248,23 @@ const CreateArticle = (props) => {
                         esta categoria
                       </Form.Text>
                     </Form.Group>
+                  </Col>
+                  <Col md={2} className={'d-flex align-items-center'}>
+                    <OverlayTrigger
+                      placement={'bottom'}
+                      overlay={
+                        <Tooltip id={'tooltip-us'}>
+                          Administrar categorias
+                        </Tooltip>
+                      }
+                    >
+                      <Button
+                        variant='info'
+                        onClick={(e) => setShowManageCategoriesModal(true)}
+                      >
+                        <i className='fas fa-tasks'></i>
+                      </Button>
+                    </OverlayTrigger>
                   </Col>
                 </Row>
                 <Row className={'mt-2'}>

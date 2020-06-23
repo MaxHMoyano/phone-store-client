@@ -33,40 +33,43 @@ function App() {
       return response;
     },
     function (error) {
-      const originalRequest = error.config;
+      console.error(error);
+      if (error.response) {
+        const originalRequest = error.config;
 
-      if (
-        error.response.status === 401 &&
-        originalRequest.url ===
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA9AaR6CUuvREG_QrajjPmCj6U0ZT2UdIU'
-      ) {
-        // router.push('/login');
-        return Promise.reject(error);
-      }
+        if (
+          error.response.status === 401 &&
+          originalRequest.url ===
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA9AaR6CUuvREG_QrajjPmCj6U0ZT2UdIU'
+        ) {
+          // router.push('/login');
+          return Promise.reject(error);
+        }
 
-      if (error.response.status === 403 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        const refreshToken = window.localStorage.getItem('refresh_token');
-        return axios
-          .post(
-            'https://securetoken.googleapis.com/v1/token?key=AIzaSyA9AaR6CUuvREG_QrajjPmCj6U0ZT2UdIU',
-            {
-              grant_type: 'refresh_token',
-              refresh_token: refreshToken,
-            }
-          )
-          .then((res) => {
-            if (res.status === 200) {
-              window.localStorage.setItem('token', res.data.id_token);
-              window.localStorage.setItem(
-                'refresh_token',
-                res.data.refresh_token
-              );
-              axios.defaults.headers.common['Authorization'] =
-                'Bearer ' + window.localStorage.getItem('token');
-              return axios(originalRequest);
-            }
-          });
+        if (error.response.status === 403 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          const refreshToken = window.localStorage.getItem('refresh_token');
+          return axios
+            .post(
+              'https://securetoken.googleapis.com/v1/token?key=AIzaSyA9AaR6CUuvREG_QrajjPmCj6U0ZT2UdIU',
+              {
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken,
+              }
+            )
+            .then((res) => {
+              if (res.status === 200) {
+                window.localStorage.setItem('token', res.data.id_token);
+                window.localStorage.setItem(
+                  'refresh_token',
+                  res.data.refresh_token
+                );
+                axios.defaults.headers.common['Authorization'] =
+                  'Bearer ' + window.localStorage.getItem('token');
+                return axios(originalRequest);
+              }
+            });
+        }
       }
       return Promise.reject(error);
     }

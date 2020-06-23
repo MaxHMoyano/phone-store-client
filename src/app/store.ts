@@ -4,6 +4,7 @@ import transactions from '../redux/slices/TransactionsSlice';
 import shoppingCart from '../redux/slices/shoppingCartSlice';
 import categories from '../redux/slices/categoriesSlice';
 import user from '../redux/slices/userSlice';
+import news from '../redux/slices/newsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     shoppingCart,
     categories,
     user,
+    news,
   },
 });
 

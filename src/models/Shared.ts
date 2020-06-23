@@ -18,7 +18,7 @@ export interface Subarticle {
 }
 
 export interface Category {
-  id: string;
+  id?: string;
   name: string;
   selected?: boolean;
 }
@@ -34,6 +34,12 @@ export interface Item {
   quantity: number;
   subarticle: string;
   name: string;
+}
+
+export interface News {
+  id?: string;
+  img_desktop: string;
+  img_mobile: string;
 }
 
 interface FirebaseTimeStamp {
