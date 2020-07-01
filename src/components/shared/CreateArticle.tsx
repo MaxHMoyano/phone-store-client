@@ -24,6 +24,8 @@ import {
 } from '../../redux/slices/articlesSlice';
 import { categoriesService } from '../../redux/services/categoriesService';
 import CategoriesModal from './CategoriesModal';
+import _ from 'lodash'
+
 
 const CreateArticle = (props) => {
   const dispatch = useDispatch();
@@ -136,7 +138,10 @@ const CreateArticle = (props) => {
   useEffect(() => {
     if (props.articleId && props.show) {
       articlesService.getArticle(props.articleId).then(async (article) => {
-        let category = await categoriesService.getCategory(article.category);
+        let category = null;
+        if (article.category) {
+          category = await categoriesService.getCategory(article.category);
+        }
         setPhotoUrl(article.photo);
         setIsPhotoUploaded(true);
         formik.setValues({
@@ -150,10 +155,10 @@ const CreateArticle = (props) => {
           basePrice: article.subarticles.length
             ? article.subarticles[0].price
             : 0,
-          category: {
-            label: category.name,
-            value: category.id,
-          },
+            category:  !(_.isEmpty(category)) ? {
+              label: category.name,
+              value: category.id,
+            } : null,
         });
       });
     }

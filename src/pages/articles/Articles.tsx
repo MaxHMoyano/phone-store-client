@@ -74,6 +74,14 @@ export default function Articles() {
     } catch (error) {}
   };
 
+
+  const getShortenedSubarticleName = (name: string) => {
+    let splittedString = name.split('(')
+    let shortenedArticleName = splittedString[0].slice(0, 10)
+    return `${shortenedArticleName}... (${splittedString[1].replace(/[)]/g, '')})`
+
+  }
+
   // Empty articles
   if (!articlesPending && !articles.length) {
     return (
@@ -192,8 +200,9 @@ export default function Articles() {
                                     : 'line-through',
                                 }}
                               >
-                                {subarticle.name} - ${subarticle.price}
+                                {subarticle.name.length > 25 ? getShortenedSubarticleName(subarticle.name) : subarticle.name}
                               </span>
+                              <span>&nbsp; - ${subarticle.price}</span>
                             </Dropdown.Item>
                           )
                       )}
