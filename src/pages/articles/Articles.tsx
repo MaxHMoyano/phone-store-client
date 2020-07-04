@@ -74,13 +74,14 @@ export default function Articles() {
     } catch (error) {}
   };
 
-
   const getShortenedSubarticleName = (name: string) => {
-    let splittedString = name.split('(')
-    let shortenedArticleName = splittedString[0].slice(0, 10)
-    return `${shortenedArticleName}... (${splittedString[1].replace(/[)]/g, '')})`
-
-  }
+    let splittedString = name.split('(');
+    let shortenedArticleName = splittedString[0].slice(0, 10);
+    return `${shortenedArticleName}... (${splittedString[1].replace(
+      /[)]/g,
+      ''
+    )})`;
+  };
 
   // Empty articles
   if (!articlesPending && !articles.length) {
@@ -164,7 +165,9 @@ export default function Articles() {
                 </Button>
               </div>
             )}
-            <img alt={'article_image'} src={article.photo} />
+            <div className='article_header'>
+              <img alt={'article_image'} src={article.photo} />
+            </div>
             <div className='article_content'>
               <div className='article_description'>
                 <h3 className='mb-1'>{article.name}</h3>
@@ -200,7 +203,9 @@ export default function Articles() {
                                     : 'line-through',
                                 }}
                               >
-                                {subarticle.name.length > 25 ? getShortenedSubarticleName(subarticle.name) : subarticle.name}
+                                {subarticle.name.length > 25
+                                  ? getShortenedSubarticleName(subarticle.name)
+                                  : subarticle.name}
                               </span>
                               <span>&nbsp; - ${subarticle.price}</span>
                             </Dropdown.Item>
