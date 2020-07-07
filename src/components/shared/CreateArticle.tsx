@@ -24,8 +24,7 @@ import {
 } from '../../redux/slices/articlesSlice';
 import { categoriesService } from '../../redux/services/categoriesService';
 import CategoriesModal from './CategoriesModal';
-import _ from 'lodash'
-
+import _ from 'lodash';
 
 const CreateArticle = (props) => {
   const dispatch = useDispatch();
@@ -58,7 +57,7 @@ const CreateArticle = (props) => {
         id: yup.string().nullable(),
         article: yup.string().nullable(),
         disabled: yup.boolean(),
-      })
+      }),
     ),
   });
 
@@ -94,7 +93,7 @@ const CreateArticle = (props) => {
           }));
           await articlesService.createSubarticles(
             createdArticle.id,
-            articleItems
+            articleItems,
           );
           await uploadPhoto(createdArticle.id);
         } else {
@@ -122,7 +121,7 @@ const CreateArticle = (props) => {
       try {
         // Subo la foto
         let files: FileList = (document.getElementById(
-          'image-file-upload'
+          'image-file-upload',
         ) as HTMLInputElement).files;
         if (files.length) {
           await articlesService.uploadArticlePhoto(articleId, files[0]);
@@ -155,13 +154,16 @@ const CreateArticle = (props) => {
           basePrice: article.subarticles.length
             ? article.subarticles[0].price
             : 0,
-            category:  !(_.isEmpty(category)) ? {
-              label: category.name,
-              value: category.id,
-            } : null,
+          category: !_.isEmpty(category)
+            ? {
+                label: category.name,
+                value: category.id,
+              }
+            : null,
         });
       });
     }
+    // eslint-disable-next-line
   }, [props.articleId]);
 
   const addArticleItem = (e) => {
@@ -187,7 +189,7 @@ const CreateArticle = (props) => {
   };
 
   const [isUpdatingSubarticle, setIsUpdatingSubarticle] = useState<boolean>(
-    false
+    false,
   );
   const handleDeletedSubarticle = async (subarticle: Subarticle, idx) => {
     if (props.articleId) {
@@ -288,12 +290,10 @@ const CreateArticle = (props) => {
                         <Tooltip id={'tooltip-us'}>
                           Administrar categorias
                         </Tooltip>
-                      }
-                    >
+                      }>
                       <Button
                         variant='info'
-                        onClick={(e) => setShowManageCategoriesModal(true)}
-                      >
+                        onClick={(e) => setShowManageCategoriesModal(true)}>
                         <i className='fas fa-tasks'></i>
                       </Button>
                     </OverlayTrigger>
@@ -325,16 +325,14 @@ const CreateArticle = (props) => {
                         <Tooltip id={'tooltip-article'}>
                           Agregar variación
                         </Tooltip>
-                      }
-                    >
+                      }>
                       <Button variant={'dark'} onClick={addArticleItem}>
                         <i className='fas fa-plus'></i>
                       </Button>
                     </OverlayTrigger>
                   </Col>
                   <Col
-                    className={'d-flex align-items-center justify-content-end'}
-                  >
+                    className={'d-flex align-items-center justify-content-end'}>
                     <Form.Check
                       custom
                       type={'checkbox'}
@@ -369,7 +367,7 @@ const CreateArticle = (props) => {
                                   onChange={(e) =>
                                     formik.setFieldValue(
                                       `subarticles[${idx}].name`,
-                                      e.target.value
+                                      e.target.value,
                                     )
                                   }
                                 />
@@ -382,7 +380,7 @@ const CreateArticle = (props) => {
                                   onChange={(e) =>
                                     formik.setFieldValue(
                                       `subarticles[${idx}].price`,
-                                      e.target.value
+                                      e.target.value,
                                     )
                                   }
                                 />
@@ -391,8 +389,7 @@ const CreateArticle = (props) => {
                                 style={{
                                   verticalAlign: 'middle',
                                   textAlign: 'center',
-                                }}
-                              >
+                                }}>
                                 <Form.Check
                                   disabled={subarticle.disabled}
                                   custom
@@ -403,7 +400,7 @@ const CreateArticle = (props) => {
                                   onChange={(e) =>
                                     formik.setFieldValue(
                                       `subarticles[${idx}].active`,
-                                      !subarticle.active
+                                      !subarticle.active,
                                     )
                                   }
                                 />
@@ -417,8 +414,7 @@ const CreateArticle = (props) => {
                                         ? 'Habilitar'
                                         : 'Deshabilitar'}
                                     </Tooltip>
-                                  }
-                                >
+                                  }>
                                   <Button
                                     disabled={isUpdatingSubarticle}
                                     variant={
@@ -426,8 +422,7 @@ const CreateArticle = (props) => {
                                     }
                                     onClick={(e) =>
                                       handleDeletedSubarticle(subarticle, idx)
-                                    }
-                                  >
+                                    }>
                                     {subarticle.disabled ? (
                                       <i className='fas fa-check'></i>
                                     ) : (
@@ -437,7 +432,7 @@ const CreateArticle = (props) => {
                                 </OverlayTrigger>
                               </td>
                             </tr>
-                          )
+                          ),
                         )}
                       </tbody>
                     </Table>
@@ -448,8 +443,7 @@ const CreateArticle = (props) => {
               <Col
                 className={
                   'd-flex align-items-center justify-content-center flex-column'
-                }
-              >
+                }>
                 <Fragment>
                   {isPhotoUploaded && (
                     <img
@@ -461,8 +455,7 @@ const CreateArticle = (props) => {
                   <Button
                     onClick={(e) =>
                       document.getElementById('image-file-upload').click()
-                    }
-                  >
+                    }>
                     {!isPhotoUploaded ? (
                       <i className='fas fa-upload'></i>
                     ) : (
@@ -487,15 +480,13 @@ const CreateArticle = (props) => {
             <Button
               disabled={formik.isSubmitting}
               variant={'light'}
-              onClick={handleCloseModal}
-            >
+              onClick={handleCloseModal}>
               Cancelar
             </Button>
             <Button
               disabled={formik.isSubmitting}
               variant={'primary'}
-              type={'submit'}
-            >
+              type={'submit'}>
               {formik.isSubmitting ? (
                 <i className='fas fa-spinner fa-spin'></i>
               ) : (
