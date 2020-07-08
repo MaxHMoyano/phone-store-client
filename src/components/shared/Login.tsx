@@ -70,12 +70,20 @@ const Login = (props) => {
               {formik.errors.password}
             </Form.Control.Feedback>
             <Form.Control.Feedback type='valid'>
-              Se ve bien
+              Se ve bien!
             </Form.Control.Feedback>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button type={'submit'}>Iniciar Sesión</Button>
+          <Button
+            type={'submit'}
+            disabled={formik.isSubmitting || !formik.isValid}>
+            {formik.isSubmitting ? (
+              <i className='fas fa-spinner fa-spin'></i>
+            ) : (
+              <span>Iniciar Sesión</span>
+            )}
+          </Button>
         </Modal.Footer>
       </Form>
     </Modal>

@@ -24,10 +24,10 @@ const Home = () => {
 
   // local state
   const [showCreateNewsModal, setShowCreateNewsModal] = useState<boolean>(
-    false
+    false,
   );
   const [showDeleteNewsModal, setShowDeleteNewsModal] = useState<boolean>(
-    false
+    false,
   );
   const [currentNews, setCurrentNews] = useState<string>('');
 
@@ -64,8 +64,7 @@ const Home = () => {
             <Button
               variant={'dark'}
               className={'mx-2'}
-              onClick={(e) => setShowCreateNewsModal(true)}
-            >
+              onClick={(e) => setShowCreateNewsModal(true)}>
               Agregar
             </Button>
           )}
@@ -73,9 +72,12 @@ const Home = () => {
       ) : (
         <div className='home_carousel'>
           {newsPending ? (
-            <div className={'d-flex justify-content-center'}>
-              {' '}
+            <div
+              className={
+                'd-flex flex-column justify-content-center align-items-center'
+              }>
               <i className='fas fa-spin fa-spinner fa-2x'></i>
+              <span>Cargando novedades . . .</span>
             </div>
           ) : (
             <Carousel interval={7000}>
@@ -91,15 +93,13 @@ const Home = () => {
                       <Button
                         variant={'dark'}
                         className={'mx-2'}
-                        onClick={(e) => setShowCreateNewsModal(true)}
-                      >
+                        onClick={(e) => setShowCreateNewsModal(true)}>
                         Agregar
                       </Button>
                       <Button
                         onClick={(e) => handleDeleteConfirm(element)}
                         className={'mx-2'}
-                        variant={'danger'}
-                      >
+                        variant={'danger'}>
                         Eliminar
                       </Button>
                     </Carousel.Caption>
