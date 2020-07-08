@@ -42,52 +42,45 @@ const Navbar = () => {
             onClick={(e) =>
               window.open(
                 'https://www.instagram.com/tiendacoolcovers/',
-                '_blank'
+                '_blank',
               )
-            }
-          >
+            }>
             @TiendaCoolCovers
           </Button>
         </div>
-        <div className='actions d-flex align-items-center'>
+        <div className='actions d-flex align-items-center justify-content-end'>
           <Fragment>
             <OverlayTrigger
               placement={'bottom'}
-              overlay={<Tooltip id={'tooltip-home'}>Home</Tooltip>}
-            >
+              overlay={<Tooltip id={'tooltip-home'}>Home</Tooltip>}>
               <Button
                 variant='dark'
-                className='mx-2 navbar_button navbar_home'
-                onClick={(e) => (document.location.href = '#home_container')}
-              >
+                className='navbar_button navbar_home'
+                onClick={(e) => (document.location.href = '#home_container')}>
                 <i className='fas fa-home'></i>
               </Button>
             </OverlayTrigger>
             <OverlayTrigger
               placement={'bottom'}
-              overlay={<Tooltip id={'tooltip-cart'}>Carrito</Tooltip>}
-            >
+              overlay={<Tooltip id={'tooltip-cart'}>Carrito</Tooltip>}>
               <Button
                 variant='dark'
-                className='mx-2 navbar_button'
+                className='navbar_button'
                 onClick={(e) =>
                   dispatch(shoppingCartSlice.actions.toggleShoppingCart())
                 }
-              >
+                style={{ position: 'relative' }}>
                 <i className='fas fa-shopping-cart'></i>
+                <Badge
+                  variant='primary'
+                  style={{
+                    position: 'absolute',
+                    top: '-.5rem',
+                  }}>
+                  {pendingCount}
+                </Badge>
               </Button>
             </OverlayTrigger>
-
-            <Badge
-              variant='primary'
-              style={{
-                position: 'relative',
-                right: '1.5rem',
-                bottom: '.75rem',
-              }}
-            >
-              {pendingCount}
-            </Badge>
           </Fragment>
         </div>
         <Profile />
