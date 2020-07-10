@@ -2,6 +2,7 @@ import { Category } from '../../models/Shared';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { categoriesService } from '../services/categoriesService';
+import { fetchArticles } from './articlesSlice';
 
 interface Categories {
   pending: boolean;
@@ -68,6 +69,25 @@ export const fetchCategories = (): AppThunk => (dispatch) => {
       let mappedCategories = categories.map((e) => ({ ...e, selected: false }));
       dispatch(categoriesSlice.actions.success(mappedCategories));
       resolve(mappedCategories);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const selectCategory = (category: Category = null): AppThunk => (
+  dispatch,
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (category) {
+        await dispatch(fetchArticles(category.id));
+        dispatch(categoriesSlice.actions.setActive(category));
+      } else {
+        await dispatch(fetchArticles());
+        dispatch(categoriesSlice.actions.removeActive());
+      }
+      resolve();
     } catch (error) {
       reject(error);
     }

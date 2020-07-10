@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Logo from '../../assets/logo.png';
 import { Carousel, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -51,11 +50,6 @@ const Home = () => {
         show={showDeleteNewsModal}
         onHide={(e) => setShowDeleteNewsModal(false)}
       />
-      <div className='branding'>
-        {/* <h1>Tienda CoolCovers</h1> */}
-        <img src={Logo} alt='' />
-        <p>Renovate!</p>
-      </div>
       {!newsPending && !news.length ? (
         <div className={'d-flex flex-column align-items-center '}>
           <i className='fas fa-battery-empty fa-3x'></i>

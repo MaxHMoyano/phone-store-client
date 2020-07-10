@@ -2,9 +2,11 @@
 // @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
 
+// Base
+$font-size-base: 0.8rem;
+
 // Colors
 $dark: #3b3d38;
-// $primary: #efe64a;
 $primary: darken(
   $color: #efe64a,
   $amount: 10%,

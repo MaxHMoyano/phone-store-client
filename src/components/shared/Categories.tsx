@@ -28,7 +28,7 @@ const Categories = () => {
 
   const handleCategoryChange = (category: Category) => {
     dispatch(categoriesSlice.actions.setActive(category));
-    document.location.href = '#articles_container';
+    document.location.href = '#articles_wrapper';
     dispatch(fetchArticles(category.id));
   };
 
@@ -62,15 +62,13 @@ const Categories = () => {
               {categories.map((category, idx) => (
                 <Dropdown.Item
                   onClick={(e) => handleCategoryChange(category)}
-                  key={idx}
-                >
+                  key={idx}>
                   {category.name}
                 </Dropdown.Item>
               ))}
               {isUserLoggedIn && (
                 <Dropdown.Item
-                  onClick={(e) => setShowManageCategoryModal(true)}
-                >
+                  onClick={(e) => setShowManageCategoryModal(true)}>
                   <i className='fas fa-plus mr-2'></i>
                   <span>Agregar categoria</span>
                 </Dropdown.Item>
