@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { articlesService } from '../../redux/services/articlesService';
-import { fetchArticles } from '../../redux/slices/articlesSlice';
+import { deleteArticle } from '../../redux/slices/articlesSlice';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -14,12 +13,11 @@ const DeleteArticle = (props) => {
 
   const [submitting, setSubmitting] = useState(false);
 
-  const deleteArticle = async () => {
+  const handleDeleteArticle = async () => {
     setSubmitting(true);
-    await articlesService.deleteArticle(props.articleId);
-    await dispatch(fetchArticles());
-    props.onHide();
+    await dispatch(deleteArticle(props.articleId));
     setSubmitting(false);
+    props.onHide();
   };
 
   return (
@@ -35,15 +33,13 @@ const DeleteArticle = (props) => {
           <Button
             disabled={submitting}
             variant={'light'}
-            onClick={handleCloseModal}
-          >
+            onClick={handleCloseModal}>
             Cancelar
           </Button>
           <Button
             disabled={submitting}
             variant={'danger'}
-            onClick={(e) => deleteArticle()}
-          >
+            onClick={(e) => handleDeleteArticle()}>
             {submitting ? (
               <i className='fas fa-spinner fa-spin'></i>
             ) : (

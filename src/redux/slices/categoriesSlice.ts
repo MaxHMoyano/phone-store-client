@@ -4,8 +4,8 @@ import { RootState, AppThunk } from '../../app/store';
 import { categoriesService } from '../services/categoriesService';
 
 interface Categories {
-  pending: Boolean;
-  error: Boolean;
+  pending: boolean;
+  error: boolean;
   data: Category[];
 }
 

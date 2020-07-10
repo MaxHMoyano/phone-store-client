@@ -15,7 +15,10 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Article, Subarticle } from '../../models/Shared';
 import { articlesService } from '../../redux/services/articlesService';
-import { selectCategories } from '../../redux/slices/categoriesSlice';
+import {
+  selectCategories,
+  selectedCategoriesPendingState,
+} from '../../redux/slices/categoriesSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
 import {
@@ -30,6 +33,7 @@ const CreateArticle = (props) => {
   const dispatch = useDispatch();
 
   const categories = useSelector(selectCategories);
+  const isCategoriesPending = useSelector(selectedCategoriesPendingState);
 
   const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
   const [photoUrl, setPhotoUrl] = useState('');
@@ -279,6 +283,7 @@ const CreateArticle = (props) => {
                       <Form.Group>
                         <Form.Label>Categoria</Form.Label>
                         <Select
+                          isLoading={isCategoriesPending}
                           value={formik.values.category}
                           options={categories.map((category) => ({
                             label: category.name,

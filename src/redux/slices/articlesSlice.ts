@@ -35,12 +35,20 @@ export const articlesSlice = createSlice({
       state.error = action.payload;
       state.pending = false;
     },
+    updateArticle: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+      state.pending = false;
+    },
+    deleteArticle: (state, action: PayloadAction<string>) => {
+      let idx = state.data.findIndex((e) => e.id === action.payload);
+      state.data.splice(idx, 1);
+    },
     updateSubarticle: (state, action: PayloadAction<Subarticle>) => {
       let articleIdx = state.data.findIndex(
-        (e) => e.id === action.payload.article
+        (e) => e.id === action.payload.article,
       );
       let subarticleIdx = state.data[articleIdx].subarticles.findIndex(
-        (e) => e.id === action.payload.id
+        (e) => e.id === action.payload.id,
       );
       state.data[articleIdx].subarticles[subarticleIdx] = {
         ...action.payload,
@@ -55,14 +63,14 @@ export const articlesSlice = createSlice({
 // code can then be executed and other actions can be dispatched
 export const fetchArticles = (
   filterBy: string = '',
-  sortBy: string = ''
+  sortBy: string = '',
 ): AppThunk => (dispatch) => {
   return new Promise(async (resolve, reject) => {
     try {
       dispatch(articlesSlice.actions.request());
       const articles: Article[] = await articlesService.fetchArticles(
         filterBy,
-        sortBy
+        sortBy,
       );
       dispatch(articlesSlice.actions.success(articles));
       resolve(articles);
@@ -72,8 +80,19 @@ export const fetchArticles = (
   });
 };
 
+export const deleteArticle = (articleId: string): AppThunk => (dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await articlesService.deleteArticle(articleId);
+      dispatch(articlesSlice.actions.deleteArticle(articleId));
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 export const updateSubarticle = (subarticle: Subarticle): AppThunk => (
-  dispatch
+  dispatch,
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
