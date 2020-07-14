@@ -6,7 +6,7 @@ import {
   selectTransactions,
   selectTransactionsPendingStatus,
   updateTransaction,
-} from '../../redux/slices/TransactionsSlice';
+} from '../../redux/slices/transactionsSlice';
 import { fromUnixTime, format } from 'date-fns';
 import { Transaction } from '../../models/Shared';
 
@@ -49,25 +49,22 @@ const Transactions = (props) => {
                     <td>
                       {format(
                         fromUnixTime(transaction.created_at._seconds),
-                        'dd/MM/yyyy'
+                        'dd/MM/yyyy',
                       )}
                     </td>
                     <td>
                       {transaction.items.map((item, index) => (
                         <div key={index}>
                           <span
-                            style={{ width: '5%', display: 'inline-block' }}
-                          >
+                            style={{ width: '5%', display: 'inline-block' }}>
                             {item.quantity}
                           </span>
                           <span
-                            style={{ width: '5%', display: 'inline-block' }}
-                          >
+                            style={{ width: '5%', display: 'inline-block' }}>
                             -
                           </span>
                           <span
-                            style={{ width: 'auto', display: 'inline-block' }}
-                          >
+                            style={{ width: 'auto', display: 'inline-block' }}>
                             {item.name}
                           </span>
                         </div>
@@ -83,7 +80,7 @@ const Transactions = (props) => {
                         onChange={(e) =>
                           changeTransactionStatus(
                             transaction,
-                            !transaction.active
+                            !transaction.active,
                           )
                         }
                       />

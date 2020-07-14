@@ -3,7 +3,7 @@ import { Dropdown, Badge, Button } from 'react-bootstrap';
 import Login from '../shared/Login';
 import CreateArticle from '../shared/CreateArticle';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTransactionCount } from '../../redux/slices/TransactionsSlice';
+import { selectTransactionCount } from '../../redux/slices/transactionsSlice';
 import { userLoggedInState, userSlice } from '../../redux/slices/userSlice';
 import Transactions from '../shared/Transactions';
 
@@ -41,15 +41,13 @@ const Profile = (props) => {
             <Dropdown.Menu>
               <Dropdown.Item
                 onClick={(e) => setShowCreateArticleModal(true)}
-                className='p-3 d-flex align-items-center justify-content-between'
-              >
+                className='p-3 d-flex align-items-center justify-content-between'>
                 Agregar articulo
                 <i className='fas fa-plus ml-3'></i>
               </Dropdown.Item>
               <Dropdown.Item
                 onClick={(e) => setShowTransactionsModal(true)}
-                className='p-3 d-flex align-items-center justify-content-between'
-              >
+                className='p-3 d-flex align-items-center justify-content-between'>
                 Compras pendientes
                 <Badge variant='info' className='ml-3'>
                   {transactionsCount}
@@ -57,8 +55,7 @@ const Profile = (props) => {
               </Dropdown.Item>
               <Dropdown.Item
                 onClick={(e) => dispatch(userSlice.actions.logout())}
-                className='p-3 d-flex align-items-center justify-content-between'
-              >
+                className='p-3 d-flex align-items-center justify-content-between'>
                 Cerrar Sesión
                 <i className='fas fa-sign-out-alt ml-3'></i>
               </Dropdown.Item>

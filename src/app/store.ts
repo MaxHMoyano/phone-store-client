@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import articles from '../redux/slices/articlesSlice';
-import transactions from '../redux/slices/TransactionsSlice';
+import transactions from '../redux/slices/transactionsSlice';
 import shoppingCart from '../redux/slices/shoppingCartSlice';
 import categories from '../redux/slices/categoriesSlice';
 import user from '../redux/slices/userSlice';

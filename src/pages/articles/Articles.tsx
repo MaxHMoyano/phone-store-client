@@ -10,7 +10,7 @@ import {
   fetchArticles,
   selectArticlesPendingState,
 } from '../../redux/slices/articlesSlice';
-import { fetchTransactions } from '../../redux/slices/TransactionsSlice';
+import { fetchTransactions } from '../../redux/slices/transactionsSlice';
 import { Article, Subarticle } from '../../models/Shared';
 import {
   selectSelectedCategory,
@@ -29,10 +29,10 @@ export default function Articles() {
   const articlesPending = useSelector(selectArticlesPendingState);
 
   const [showDeleteArticleModal, setShowDeleteArticleModal] = useState<boolean>(
-    false
+    false,
   );
   const [showCreateArticleModal, setShowCreateArticleModal] = useState<boolean>(
-    false
+    false,
   );
   const [selectedArticle, setSelectedArticle] = useState<Article>(null);
   const [showShoppingCart, setShowShoppingCart] = useState<boolean>(false);
@@ -79,7 +79,7 @@ export default function Articles() {
     let shortenedArticleName = splittedString[0].slice(0, 10);
     return `${shortenedArticleName}... (${splittedString[1].replace(
       /[)]/g,
-      ''
+      '',
     )})`;
   };
 
@@ -91,8 +91,7 @@ export default function Articles() {
         className={
           'd-flex justify-content-center align-items-center flex-column'
         }
-        style={{ margin: '2.5rem 0 2.5rem 0' }}
-      >
+        style={{ margin: '2.5rem 0 2.5rem 0' }}>
         <i className='fas fa-battery-empty fa-3x'></i>
         <span className='mt-4'>No hay nada!</span>
       </div>
@@ -106,8 +105,7 @@ export default function Articles() {
         className={
           'd-flex justify-content-center align-items-center flex-column'
         }
-        style={{ margin: '2.5rem 0 2.5rem 0' }}
-      >
+        style={{ margin: '2.5rem 0 2.5rem 0' }}>
         <i className='fas fa-spin fa-spinner fa-3x'></i>
         <span className='mt-4'>Cargando productos . . .</span>
       </div>
@@ -138,8 +136,7 @@ export default function Articles() {
             <span>{selectedCategory.name}</span>
             <i
               onClick={deleteSelectedCategory}
-              className='badge_icon fas fa-times ml-3'
-            ></i>
+              className='badge_icon fas fa-times ml-3'></i>
           </Badge>
         )}
       </h3>
@@ -151,16 +148,14 @@ export default function Articles() {
                 <Button
                   variant={'light'}
                   className={'mx-1'}
-                  onClick={(e) => handleEditArticleSelect(article)}
-                >
+                  onClick={(e) => handleEditArticleSelect(article)}>
                   <i className='fas fa-edit'></i>
                 </Button>
 
                 <Button
                   variant={'danger'}
                   className={'mx-1'}
-                  onClick={(e) => handleDeleteArticleSelect(article)}
-                >
+                  onClick={(e) => handleDeleteArticleSelect(article)}>
                   <i className='fas fa-trash'></i>{' '}
                 </Button>
               </div>
@@ -180,8 +175,7 @@ export default function Articles() {
                   <Dropdown.Toggle
                     id={`shooping_item_${idx}`}
                     className={'shopping_dropwdown'}
-                    variant='success'
-                  >
+                    variant='success'>
                     <i className='fas fa-shopping-cart'></i>
                   </Dropdown.Toggle>
 
@@ -194,22 +188,20 @@ export default function Articles() {
                             <Dropdown.Item
                               key={idx}
                               disabled={!subarticle.active}
-                              onClick={(e) => addArticleToCart(subarticle)}
-                            >
+                              onClick={(e) => addArticleToCart(subarticle)}>
                               <span
                                 style={{
                                   textDecoration: subarticle.active
                                     ? ''
                                     : 'line-through',
-                                }}
-                              >
+                                }}>
                                 {subarticle.name.length > 25
                                   ? getShortenedSubarticleName(subarticle.name)
                                   : subarticle.name}
                               </span>
                               <span>&nbsp; - ${subarticle.price}</span>
                             </Dropdown.Item>
-                          )
+                          ),
                       )}
                   </Dropdown.Menu>
                 </Dropdown>
