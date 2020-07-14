@@ -76,11 +76,7 @@ export default function Articles() {
 
   const getShortenedSubarticleName = (name: string) => {
     let splittedString = name.split('(');
-    let shortenedArticleName = splittedString[0].slice(0, 10);
-    return `${shortenedArticleName}... (${splittedString[1].replace(
-      /[)]/g,
-      '',
-    )})`;
+    return `${splittedString[1].replace(/[)]/g, '')}`;
   };
 
   // Empty articles
