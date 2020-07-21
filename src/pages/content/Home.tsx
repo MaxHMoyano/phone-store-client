@@ -54,7 +54,6 @@ const Home = () => {
       <div className='branding'>
         {/* <h1>Tienda CoolCovers</h1> */}
         <img src={Logo} alt='' />
-        <p>Renovate!</p>
       </div>
       {!newsPending && !news.length ? (
         <div className={'d-flex flex-column align-items-center '}>
