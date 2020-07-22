@@ -62,7 +62,7 @@ const Profile = (props) => {
             </Dropdown.Menu>
           </Dropdown>
         ) : (
-          <Button variant='light' onClick={(e) => setShowLoginModal(true)}>
+          <Button variant='dark' onClick={(e) => setShowLoginModal(true)}>
             Iniciar Sesión
           </Button>
         )}
